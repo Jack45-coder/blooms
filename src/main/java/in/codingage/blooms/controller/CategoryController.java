@@ -72,13 +72,38 @@ public class CategoryController {
         //return true
         // if id not found, return false;
 
+        List<Category> categoryList = Database.getInstance().getCategoryList();
+        for (Category category : categoryList){
+            if (category.getId().equals(categoryId)){
+                category.setActive(false); // soft delete
+            }
+        }
         return true;
     }
 
-    public CategoryResponse updateCategory(){
+    public CategoryResponse updateCategory(String categoryId, CategoryRequest request){
         // fetch category by id and update its name desc and cUrl using category request
         //make sure you are updating the found category and the list...
          // return updated category
+        List<Category> categoryList = Database.getInstance().getCategoryList();
+        for(Category category : categoryList){
+            if(category.getId().equals(categoryId)){
+
+                // update fields
+                category.setName(request.getTitle());
+                category.setDescription(request.getDesc());
+                category.setImageUrl(request.getcUrl());
+
+                // prepare response
+                CategoryResponse response = new CategoryResponse();
+                response.setId(category.getId());
+                response.setTitle(category.getName());
+                response.setDesc(category.getDescription());
+                response.setcUrl(category.getImageUrl());
+
+                return response;  // updated category response
+            }
+        }
         return null;
     }
 
