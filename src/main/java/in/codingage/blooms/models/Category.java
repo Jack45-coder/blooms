@@ -1,7 +1,8 @@
 package in.codingage.blooms.models;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class Category {
     private String id;
@@ -9,8 +10,8 @@ public class Category {
     private String description;
     private String imageUrl;
     private boolean active;
-    private Timestamp createdDTTM;
-    private Date createdBy;
+    private LocalDateTime createdDTTM;
+    private String createdBy;
     private String status;
 
     public boolean isActive() {
@@ -21,19 +22,19 @@ public class Category {
         this.active = active;
     }
 
-    public Date getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Date createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getCreatedDTTM() {
+    public LocalDateTime getCreatedDTTM() {
         return createdDTTM;
     }
 
-    public void setCreatedDTTM(Timestamp createdDTTM) {
+    public void setCreatedDTTM(LocalDateTime createdDTTM) {
         this.createdDTTM = createdDTTM;
     }
 
