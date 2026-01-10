@@ -1,10 +1,21 @@
 package in.codingage.blooms.dto;
 
 public class CategoryResponse {
+    private String id;
     private String title;
     private String desc;
     private String cUrl;
-    private String id;
+
+    public CategoryResponse(String id, String title, String desc, String cUrl) {
+        this.id = id;
+        this.title = title;
+        this.desc = desc;
+        this.cUrl = cUrl;
+    }
+
+    public CategoryResponse() {
+
+    }
 
     public String getTitle() {
         return title;

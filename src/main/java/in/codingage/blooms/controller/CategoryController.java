@@ -18,7 +18,7 @@ public class CategoryController {
     public void createCategory(CategoryRequest categoryRequest){
         Category category = new Category();
         category.setName(categoryRequest.getTitle());
-        category.setDescription(categoryRequest.getTitle());
+        category.setDescription(categoryRequest.getDesc());
         category.setImageUrl(categoryRequest.getcUrl());
 
         // for now lets give this access only to admins
@@ -75,16 +75,22 @@ public class CategoryController {
         List<Category> categoryList = Database.getInstance().getCategoryList();
         for (Category category : categoryList){
             if (category.getId().equals(categoryId)){
-                category.setActive(false); // soft delete
+                category.setActive(false); // soft delete [db hai, you have status field which is inactive]
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public CategoryResponse updateCategory(String categoryId, CategoryRequest request){
         // fetch category by id and update its name desc and cUrl using category request
         //make sure you are updating the found category and the list...
          // return updated category
+        // Validation to return from here only if id is not present.
+        if(categoryId == null || request == null){
+            //we will send error to UI later.
+            return null;
+        }
         List<Category> categoryList = Database.getInstance().getCategoryList();
         for(Category category : categoryList){
             if(category.getId().equals(categoryId)){

@@ -1,17 +1,14 @@
 package in.codingage.blooms.dto;
 
-
-
-public class CategoryRequest {
+public class SubCategoryRequest {
     private String title;
-    private String id;
     private String desc;
-    private String cUrl;
+    private String categoryId;
 
-    public CategoryRequest(String title, String desc, String cUrl){
+    public SubCategoryRequest(String title, String desc, String categoryId) {
         this.title = title;
         this.desc = desc;
-        this.cUrl = cUrl;
+        this.categoryId = categoryId;
     }
 
     public String getTitle() {
@@ -30,19 +27,11 @@ public class CategoryRequest {
         this.desc = desc;
     }
 
-    public String getcUrl() {
-        return cUrl;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setcUrl(String cUrl) {
-        this.cUrl = cUrl;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 }

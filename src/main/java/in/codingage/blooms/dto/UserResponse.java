@@ -1,12 +1,10 @@
-package in.codingage.blooms.models;
+package in.codingage.blooms.dto;
 
-public class User {
+public class UserResponse {
     private String username;
     private String email;
     private String name;
     private String profileUrl;
-    private String password;
-    private boolean active;
 
     public String getUsername() {
         return username;
@@ -32,27 +30,11 @@ public class User {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getProfileUrl() {
         return profileUrl;
     }
 
     public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }
