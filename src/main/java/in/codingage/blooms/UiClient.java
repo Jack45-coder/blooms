@@ -2,10 +2,14 @@ package in.codingage.blooms;
 
 import in.codingage.blooms.controller.CategoryController;
 import in.codingage.blooms.controller.SubCategoryController;
+import in.codingage.blooms.controller.UserController;
 import in.codingage.blooms.dto.CategoryRequest;
 import in.codingage.blooms.dto.SubCategoryRequest;
+import in.codingage.blooms.dto.UserRequest;
+import in.codingage.blooms.dto.UserResponse;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.SubCategory;
+import in.codingage.blooms.models.User;
 
 public class UiClient {
     public static void main(String[] args) {
@@ -14,6 +18,9 @@ public class UiClient {
         // login - login existing user
         // admin dashboard - manage categories, sub-categories, blogs, users
         // user dashboard - view blogs, profile, settings, create blogs
+
+        UserController userController = new UserController();
+        userController.signup(new UserRequest("Jack1234", "jack1234@gmail.com", "Jackey Kumar", "12345678", "https://jackeyImage.png"));
 
         CategoryController categoryController = new CategoryController();
         categoryController.createCategory(new CategoryRequest("Technology", "All about technology", "https://www.vecteezy.com/free-vector/tech-logo"));
@@ -38,6 +45,17 @@ public class UiClient {
             System.out.println("Description: " + subCategory.getDescription());
             System.out.println("___________________________");
         }
+
+        for (User user : Database.getInstance().getUserList()){
+            System.out.println("Name: " + user.getName());
+            System.out.println("Username: " + user.getUsername());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Profile Link: " + user.getProfileUrl());
+            System.out.println("--------------------------------");
+        }
+
+        userController.signin(new UserRequest("Jack1234", "12345678"));
+        System.out.println(userController.getUser("Jack1234"));;
 
     }
 }

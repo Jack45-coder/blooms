@@ -46,7 +46,7 @@ public class UserController {
         if (userRequest == null) return null;
 
         // basic validation
-        if (userRequest.getUsername() == null || userRequest.getUsername().isEmpty() && userRequest.getEmail() == null || userRequest.getEmail().isEmpty()) {
+        if ((userRequest.getUsername() == null || userRequest.getUsername().isEmpty()) && (userRequest.getEmail() == null || userRequest.getEmail().isEmpty())) {
             System.out.println("Username or Email required!");
             return null;
         }
@@ -68,7 +68,7 @@ public class UserController {
                 userResponse.setEmail(user.getEmail());
                 userResponse.setName(user.getName());
                 userResponse.setProfileUrl(user.getProfileUrl());
-
+                System.out.println("Login successfully");
                 return userResponse;
             }
         }
@@ -136,7 +136,7 @@ public class UserController {
     public UserResponse getUser(String usernameOrEmail){
         if(usernameOrEmail == null || usernameOrEmail.isEmpty()){
             System.out.println("Username or Email required!");
-            return false;
+            return null;
         }
 
         List<User> userList = Database.getInstance().getUserList();

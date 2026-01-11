@@ -1,10 +1,9 @@
 package in.codingage.blooms.dto;
 
-public class UserResponse {
+public class AdminResponse {
     private String username;
     private String email;
-    private String name;
-    private String profileUrl;
+    private String password;
 
     public String getUsername() {
         return username;
@@ -22,29 +21,20 @@ public class UserResponse {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getProfileUrl() {
-        return profileUrl;
-    }
-
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "AdminResponse{" +
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", profileUrl='" + profileUrl + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

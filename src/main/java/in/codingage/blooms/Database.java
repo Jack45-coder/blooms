@@ -1,5 +1,6 @@
 package in.codingage.blooms;
 
+import in.codingage.blooms.models.Admin;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.SubCategory;
 import in.codingage.blooms.models.User;
@@ -22,6 +23,8 @@ public class Database {
     // Collection of User
     private List<User> userList = new ArrayList<>();
 
+    // Collection of Admin.
+    private List<Admin> adminList = new ArrayList<>();
 
     private Database(){
     }
@@ -47,5 +50,13 @@ public class Database {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public List<Admin> getAdminList() {
+        return adminList;
+    }
+
+    public void setAdminList(List<Admin> adminList) {
+        this.adminList = adminList;
     }
 }
