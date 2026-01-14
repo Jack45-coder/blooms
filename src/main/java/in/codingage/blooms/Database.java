@@ -1,9 +1,6 @@
 package in.codingage.blooms;
 
-import in.codingage.blooms.models.Admin;
-import in.codingage.blooms.models.Category;
-import in.codingage.blooms.models.SubCategory;
-import in.codingage.blooms.models.User;
+import in.codingage.blooms.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +22,9 @@ public class Database {
 
     // Collection of Admin.
     private List<Admin> adminList = new ArrayList<>();
+
+    // Collection of Blogs.
+    private List<Blog> blogList = new ArrayList<>();
 
     private Database(){
     }
@@ -58,5 +58,13 @@ public class Database {
 
     public void setAdminList(List<Admin> adminList) {
         this.adminList = adminList;
+    }
+
+    public List<Blog> getBlogList() {
+        return blogList;
+    }
+
+    public void setBlogList(List<Blog> blogList) {
+        this.blogList = blogList;
     }
 }

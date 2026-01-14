@@ -1,18 +1,19 @@
-package in.codingage.blooms.models;
+package in.codingage.blooms.dto;
+
+import in.codingage.blooms.models.CategoryMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Blog {
+public class BlogResponse {
     private String id;
     private String title;
     private String description;
     private String content;
     private String status;
-    private boolean isActive;
     private String authorId;
-    private LocalDateTime createdDTTM;
     private List<CategoryMapping> categoryMappings;
+    private LocalDateTime createdDTTM;
 
     public String getId() {
         return id;
@@ -62,14 +63,6 @@ public class Blog {
         this.authorId = authorId;
     }
 
-    public LocalDateTime getCreatedDTTM() {
-        return createdDTTM;
-    }
-
-    public void setCreatedDTTM(LocalDateTime createdDTTM) {
-        this.createdDTTM = createdDTTM;
-    }
-
     public List<CategoryMapping> getCategoryMappings() {
         return categoryMappings;
     }
@@ -78,12 +71,11 @@ public class Blog {
         this.categoryMappings = categoryMappings;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public LocalDateTime getCreatedDTTM() {
+        return createdDTTM;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setCreatedDTTM(LocalDateTime createdDTTM) {
+        this.createdDTTM = createdDTTM;
     }
 }
-

@@ -1,15 +1,14 @@
 package in.codingage.blooms;
 
-import in.codingage.blooms.controller.CategoryController;
-import in.codingage.blooms.controller.SubCategoryController;
-import in.codingage.blooms.controller.UserController;
-import in.codingage.blooms.dto.CategoryRequest;
-import in.codingage.blooms.dto.SubCategoryRequest;
-import in.codingage.blooms.dto.UserRequest;
-import in.codingage.blooms.dto.UserResponse;
+import in.codingage.blooms.controller.*;
+import in.codingage.blooms.dto.*;
 import in.codingage.blooms.models.Category;
+import in.codingage.blooms.models.CategoryMapping;
 import in.codingage.blooms.models.SubCategory;
 import in.codingage.blooms.models.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UiClient {
     public static void main(String[] args) {
@@ -22,6 +21,9 @@ public class UiClient {
         UserController userController = new UserController();
         userController.signup(new UserRequest("Jack1234", "jack1234@gmail.com", "Jackey Kumar", "12345678", "https://jackeyImage.png"));
 
+        AdminController adminController = new AdminController();
+        adminController.signup(new AdminRequest("Rishi1234", "rishi1234@gmail.com", "rishiSir123"));
+
         CategoryController categoryController = new CategoryController();
         categoryController.createCategory(new CategoryRequest("Technology", "All about technology", "https://www.vecteezy.com/free-vector/tech-logo"));
 
@@ -30,32 +32,73 @@ public class UiClient {
         SubCategoryController subCategoryController = new SubCategoryController();
         subCategoryController.createSubcategory(new SubCategoryRequest("Tech", "Tech is all about Technology", cate.getId()));
 
-        for(Category category : Database.getInstance().getCategoryList()){
-            System.out.println("ID: " + category.getId());
-            System.out.println("Name: " + category.getName());
-            System.out.println("Desc: " + category.getDescription());
-            System.out.println("Url: " + category.getImageUrl());
-            System.out.println("--------------------");
-        }
+        CategoryMapping categoryMapping = new CategoryMapping();
+        categoryMapping.setCategoryId("CAT001");
+        categoryMapping.setCategoryId("");
 
-        for (SubCategory subCategory : Database.getInstance().getSubCategoryList()){
-            System.out.println("Category ID: " + subCategory.getCategoryId());
-            System.out.println("SubCategory ID: " + subCategory.getId());
-            System.out.println("Title: " + subCategory.getName());
-            System.out.println("Description: " + subCategory.getDescription());
-            System.out.println("___________________________");
-        }
+        List<CategoryMapping> categoryMappings = new ArrayList<>();
+        categoryMappings.add(categoryMapping);
 
-        for (User user : Database.getInstance().getUserList()){
-            System.out.println("Name: " + user.getName());
-            System.out.println("Username: " + user.getUsername());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Profile Link: " + user.getProfileUrl());
-            System.out.println("--------------------------------");
-        }
+        BlogRequest blogRequest = new BlogRequest("Java Basics", "This blog is about Java fundamentals", "Java is an object-oriented programming language...", categoryMappings);
+        BlogRequest blogRequest2 = new BlogRequest("Python", "This blog is about PYTHON Programming", "Python is an fundamental programming language...", categoryMappings);
+        BlogController blogController = new BlogController();
 
-        userController.signin(new UserRequest("Jack1234", "12345678"));
-        System.out.println(userController.getUser("Jack1234"));;
+        BlogResponse createdBlog = blogController.createBlog(blogRequest,"AUTH001");
+        BlogResponse createdBlog2 = blogController.createBlog(blogRequest2, "AUTH001");
+//        BlogRequest updateRequest = new BlogRequest();
+//        updateRequest.setTitle("Advanced Java Concepts");
+//        updateRequest.setContent("Updated Java content...");
+//        blogController.updateBlogById(updateRequest, createdBlog.getId());
+        blogController.deleteByAuthID("AUTH001");
+
+
+//        String blogId = createdBlog.getId();
+//        BlogResponse blog = blogController.getBlogById(blogId);
+//        System.out.println(blog.getAuthorId());
+//        System.out.println(blog.getTitle());
+//        System.out.println(blog.getDescription());
+//        System.out.println(blog.getCategoryMappings());
+
+          List<BlogResponse> blogs = blogController.getAllBlog();
+          if(blogs.isEmpty()){
+              System.out.println("No blog found!");
+          }else {
+              for(BlogResponse blog : blogs){
+                  System.out.println(blog.getId());
+                  System.out.println(blog.getTitle());
+                  System.out.println(blog.getDescription());
+                  System.out.println(blog.getAuthorId());
+              }
+          }
+
+
+
+//        for(Category category : Database.getInstance().getCategoryList()){
+//            System.out.println("ID: " + category.getId());
+//            System.out.println("Name: " + category.getName());
+//            System.out.println("Desc: " + category.getDescription());
+//            System.out.println("Url: " + category.getImageUrl());
+//            System.out.println("--------------------");
+//        }
+
+//        for (SubCategory subCategory : Database.getInstance().getSubCategoryList()){
+//            System.out.println("Category ID: " + subCategory.getCategoryId());
+//            System.out.println("SubCategory ID: " + subCategory.getId());
+//            System.out.println("Title: " + subCategory.getName());
+//            System.out.println("Description: " + subCategory.getDescription());
+//            System.out.println("___________________________");
+//        }
+//
+//        for (User user : Database.getInstance().getUserList()){
+//            System.out.println("Name: " + user.getName());
+//            System.out.println("Username: " + user.getUsername());
+//            System.out.println("Email: " + user.getEmail());
+//            System.out.println("Profile Link: " + user.getProfileUrl());
+//            System.out.println("--------------------------------");
+//        }
+
+//        userController.signin(new UserRequest("Jack1234", "12345678"));
+//        adminController.signinAdmin(new AdminRequest("Rishi1234","rishi1234@gmail.com", "rishiSir123"));
 
     }
 }

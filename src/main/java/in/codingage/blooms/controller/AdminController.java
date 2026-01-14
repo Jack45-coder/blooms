@@ -62,7 +62,7 @@ public class AdminController {
                 AdminResponse adminResponse = new AdminResponse();
                 adminResponse.setUsername(admin.getUsername());
                 adminResponse.setEmail(admin.getEmail());
-
+                System.out.println("Admin login successfully");
                 return adminResponse;
             }
         }
