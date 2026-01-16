@@ -29,8 +29,8 @@ public class UiClient {
 
         Category cate = Database.getInstance().getCategoryList().get(0);
 
-        SubCategoryController subCategoryController = new SubCategoryController();
-        subCategoryController.createSubcategory(new SubCategoryRequest("Tech", "Tech is all about Technology", cate.getId()));
+//        SubCategoryController subCategoryController = new SubCategoryController();
+//        subCategoryController.createSubcategory(new SubCategoryRequest("Tech", "Tech is all about Technology", cate.getId()));
 
         CategoryMapping categoryMapping = new CategoryMapping();
         categoryMapping.setCategoryId("CAT001");
@@ -75,22 +75,22 @@ public class UiClient {
 
 //        for(Category category : Database.getInstance().getCategoryList()){
 //            System.out.println("ID: " + category.getId());
-//            System.out.println("Name: " + category.getName());
+//            System.out.println("Name: " + category.getTitle());
 //            System.out.println("Desc: " + category.getDescription());
-//            System.out.println("Url: " + category.getImageUrl());
+//            System.out.println("Url: " + category.getcUrl());
 //            System.out.println("--------------------");
 //        }
 
 //        for (SubCategory subCategory : Database.getInstance().getSubCategoryList()){
 //            System.out.println("Category ID: " + subCategory.getCategoryId());
 //            System.out.println("SubCategory ID: " + subCategory.getId());
-//            System.out.println("Title: " + subCategory.getName());
+//            System.out.println("Title: " + subCategory.getTitle());
 //            System.out.println("Description: " + subCategory.getDescription());
 //            System.out.println("___________________________");
 //        }
 //
 //        for (User user : Database.getInstance().getUserList()){
-//            System.out.println("Name: " + user.getName());
+//            System.out.println("Name: " + user.getTitle());
 //            System.out.println("Username: " + user.getUsername());
 //            System.out.println("Email: " + user.getEmail());
 //            System.out.println("Profile Link: " + user.getProfileUrl());

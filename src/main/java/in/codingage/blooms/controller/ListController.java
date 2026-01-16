@@ -39,33 +39,33 @@ public class ListController {
 
         List<CategoryResponse> categoryResponses = new ArrayList<>();
 
-        categoryResponses.add(new CategoryResponse("1", "Technology A", "All about technology", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyFSDvZA27CPTHnxlnq8vd-pfw0vcsNGFafA&s"));
-        categoryResponses.add(new CategoryResponse("2", "Technology B", "All about technology", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyFSDvZA27CPTHnxlnq8vd-pfw0vcsNGFafA&s"));
-        categoryResponses.add(new CategoryResponse("3", "Technology C", "All about technology", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyFSDvZA27CPTHnxlnq8vd-pfw0vcsNGFafA&s"));
+//        categoryResponses.add(new CategoryResponse("1", "Technology A", "All about technology", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyFSDvZA27CPTHnxlnq8vd-pfw0vcsNGFafA&s"));
+//        categoryResponses.add(new CategoryResponse("2", "Technology B", "All about technology", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyFSDvZA27CPTHnxlnq8vd-pfw0vcsNGFafA&s"));
+//        categoryResponses.add(new CategoryResponse("3", "Technology C", "All about technology", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyFSDvZA27CPTHnxlnq8vd-pfw0vcsNGFafA&s"));
 
-        for(CategoryResponse cat : categoryResponses){
-            System.out.println("Category ID: " + cat.getId() + ", Name: " + cat.getTitle());
-        }
-
-        String idToFind = "20";
-
-        for (CategoryResponse cat : categoryResponses) {
-            if (cat.getId().equals(idToFind)) {
-                System.out.println("Found Category with ID " + idToFind + ": " + cat.getTitle());
-            }
-        }
-
-        String idToRemove = "2";
-
-        for (CategoryResponse cat : categoryResponses) {
-            if (cat.getId().equals(idToRemove)) {
-                categoryResponses.remove(cat);
-                break;
-            }
-        }
-
-        for (CategoryResponse cat : categoryResponses) {
-            System.out.println("Category ID: " + cat.getId() + ", Name: " + cat.getTitle());
-        }
+//        for(CategoryResponse cat : categoryResponses){
+//            System.out.println("Category ID: " + cat.getId() + ", Name: " + cat.getTitle());
+//        }
+//
+//        String idToFind = "20";
+//
+//        for (CategoryResponse cat : categoryResponses) {
+//            if (cat.getId().equals(idToFind)) {
+//                System.out.println("Found Category with ID " + idToFind + ": " + cat.getTitle());
+//            }
+//        }
+//
+//        String idToRemove = "2";
+//
+//        for (CategoryResponse cat : categoryResponses) {
+//            if (cat.getId().equals(idToRemove)) {
+//                categoryResponses.remove(cat);
+//                break;
+//            }
+//        }
+//
+//        for (CategoryResponse cat : categoryResponses) {
+//            System.out.println("Category ID: " + cat.getId() + ", Name: " + cat.getTitle());
+//        }
     }
 }

@@ -5,21 +5,29 @@ import in.codingage.blooms.dto.CategoryRequest;
 import in.codingage.blooms.dto.CategoryResponse;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.Status;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// step1 : put rest controller annotation
+// step2 : put a common category prefix using request mapping.
 
+
+@RestController
+@RequestMapping("/api/category")
 public class CategoryController {
 
     // CRUD - Create, Read, Update, Delete
 
     // ----------- Create Category --------------------
-    public void createCategory(CategoryRequest categoryRequest){
+    @PostMapping("/create")
+    public void createCategory(@RequestBody CategoryRequest categoryRequest){
         Category category = new Category();
         category.setName(categoryRequest.getTitle());
         category.setDescription(categoryRequest.getDesc());
-        category.setImageUrl(categoryRequest.getcUrl());
+        category.setImageUrl(categoryRequest.getImageUrl());
 
         // for now lets give this access only to admins
         category.setStatus(Status.PUBLISHED.getDisplayName());
@@ -35,12 +43,13 @@ public class CategoryController {
 
     // ------------- GetCategory --------------
 
-    public CategoryResponse getCategory(String categoryId){
+    @GetMapping
+    public CategoryResponse getCategory(@RequestParam String categoryId){
         List<Category> categoryList = Database.getInstance().getCategoryList();
         for(Category category : categoryList){
             if (category.getId().equals(categoryId)){
                 CategoryResponse categoryResponse = new CategoryResponse();
-                categoryResponse.setcUrl(category.getImageUrl());
+                categoryResponse.setImageUrl(category.getImageUrl());
                 categoryResponse.setId(category.getId());
                 categoryResponse.setTitle(category.getName());
                 categoryResponse.setDesc(category.getDescription());
@@ -51,13 +60,14 @@ public class CategoryController {
     }
 
 
+    @GetMapping("/all")
     public List<CategoryResponse> getCategories(){
         List<Category> categoryList = Database.getInstance().getCategoryList();
         List<CategoryResponse> categoryResponses = new ArrayList<>();
         for(Category category : categoryList) {
             if (category.isActive()) {
                 CategoryResponse categoryResponse = new CategoryResponse();
-                categoryResponse.setcUrl(category.getImageUrl());
+                categoryResponse.setImageUrl(category.getImageUrl());
                 categoryResponse.setId(category.getId());
                 categoryResponse.setTitle(category.getName());
                 categoryResponse.setDesc(category.getDescription());
@@ -67,6 +77,7 @@ public class CategoryController {
         return categoryResponses;
     }
 
+    @DeleteMapping
     public boolean deleteCategory(String categoryId){
         // iterate the list that comes from your database and set the active flag to false
         //return true
@@ -82,10 +93,11 @@ public class CategoryController {
         return false;
     }
 
+    @PutMapping
     public CategoryResponse updateCategory(String categoryId, CategoryRequest request){
         // fetch category by id and update its name desc and cUrl using category request
         //make sure you are updating the found category and the list...
-         // return updated category
+        // return updated category
         // Validation to return from here only if id is not present.
         if(categoryId == null || request == null){
             //we will send error to UI later.
@@ -96,16 +108,16 @@ public class CategoryController {
             if(category.getId().equals(categoryId)){
 
                 // update fields
-                category.setName(request.getTitle());
-                category.setDescription(request.getDesc());
-                category.setImageUrl(request.getcUrl());
+                if(request.getTitle() != null) category.setName(request.getTitle());
+                if (request.getDesc() != null) category.setDescription(request.getDesc());
+                if (request.getImageUrl() != null) category.setImageUrl(request.getImageUrl());
 
                 // prepare response
                 CategoryResponse response = new CategoryResponse();
                 response.setId(category.getId());
                 response.setTitle(category.getName());
                 response.setDesc(category.getDescription());
-                response.setcUrl(category.getImageUrl());
+                response.setImageUrl(category.getImageUrl());
 
                 return response;  // updated category response
             }

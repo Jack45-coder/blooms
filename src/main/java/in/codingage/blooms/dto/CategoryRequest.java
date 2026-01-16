@@ -1,48 +1,22 @@
 package in.codingage.blooms.dto;
 
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class CategoryRequest {
     private String title;
-    private String id;
     private String desc;
-    private String cUrl;
+    private String imageUrl;
 
-    public CategoryRequest(String title, String desc, String cUrl){
+    public  CategoryRequest() {
+    }
+
+    public CategoryRequest(String title, String desc, String imageUrl){
         this.title = title;
         this.desc = desc;
-        this.cUrl = cUrl;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public String getcUrl() {
-        return cUrl;
-    }
-
-    public void setcUrl(String cUrl) {
-        this.cUrl = cUrl;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.imageUrl = imageUrl;
     }
 }

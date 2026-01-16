@@ -1,37 +1,14 @@
 package in.codingage.blooms.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SubCategoryRequest {
-    private String title;
-    private String desc;
+    private String id;
     private String categoryId;
-
-    public SubCategoryRequest(String title, String desc, String categoryId) {
-        this.title = title;
-        this.desc = desc;
-        this.categoryId = categoryId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public String getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
+    private String subCatName;
+    private String subCatDesc;
+    private String subCatImageUrl;
 }
