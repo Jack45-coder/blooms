@@ -1,17 +1,17 @@
 package in.codingage.blooms.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class SubCategoryResponse {
     private String id;
     private String categoryId;
     private String categoryName;
     private String name;
-    private String subCatDesc;
+    private String desc;
 
 }

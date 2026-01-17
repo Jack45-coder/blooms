@@ -1,5 +1,7 @@
 package in.codingage.blooms.models;
 
+
+
 public enum Status {
     PUBLISHED("Published"),
     INERVIEW("In Review"),
@@ -12,7 +14,7 @@ public enum Status {
         this.displayName = displayName;
     }
 
-    public String getDisplayName(){
+    public String getDisplayName() {
         return displayName;
     }
 }

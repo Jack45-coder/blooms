@@ -7,23 +7,12 @@ import lombok.Setter;
 @Setter
 public class CategoryResponse {
     private String id;
-    private String categoryId;
-    private String subCatName;
-    private String subCatDesc;
-    private String subCatImageUrl;
-
-
-
-
-
-    public CategoryResponse(String id, String title, String desc, String imageUrl) {
-        this.id = id;
-        this.title = title;
-        this.desc = desc;
-        this.imageUrl = imageUrl;
-    }
+    private String name;
+    private String description;
+    private String imageUrl;
 
     public CategoryResponse() {
 
     }
+
 }

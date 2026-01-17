@@ -6,22 +6,24 @@ import in.codingage.blooms.dto.SubCategoryResponse;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.Status;
 import in.codingage.blooms.models.SubCategory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@RestController
+@RequestMapping("api/category/subcategory")
 public class SubCategoryController {
     // TODO: 09/01/2026 complete crud here
 
     // create SubCategory
+    @PostMapping
     public void createSubcategory(SubCategoryRequest subCategoryRequest){
         // implementation here
         SubCategory subCategory = new SubCategory();
-        subCategory.setName(subCategoryRequest.getSubCatName());
-        subCategory.setDescription(subCategoryRequest.getSubCatDesc());
+        subCategory.setName(subCategoryRequest.getName());
+        subCategory.setDescription(subCategoryRequest.getDescription());
         subCategory.setCategoryId(subCategoryRequest.getCategoryId());
         subCategory.setId(String.valueOf(System.currentTimeMillis()));
         subCategory.setCreatedDTTM(LocalDateTime.now());
@@ -34,6 +36,7 @@ public class SubCategoryController {
     }
 
     // read SubCategory
+    @GetMapping
     public SubCategoryResponse getSubcategory(String id){
         // implementation here
         if(id == null || id.isEmpty()) {
@@ -61,12 +64,13 @@ public class SubCategoryController {
                 .id(subCategory.getId())
                 .categoryId(subCategory.getCategoryId())
                 .name(subCategory.getName())
-                .subCatDesc(subCategory.getDescription())
+                .desc(subCategory.getDescription())
                 .categoryName(categoryName)
                 .build();
     }
 
     // get all subCategories
+    @GetMapping("/all")
     public List<SubCategoryResponse> getSubcategories(){
         // implementation here
         List<SubCategory> subCategoryList = Database.getInstance().getSubCategoryList();
@@ -81,11 +85,10 @@ public class SubCategoryController {
                     .map(Category::getName)
                     .findFirst()
                     .orElse("UNKNOWN CATEGORY");
-
-            SubCategoryResponse response = SubCategoryResponse.builder()
+             SubCategoryResponse response = SubCategoryResponse.builder()
                     .id(subCategory.getId())
                     .name(subCategory.getName())
-                    .subCatDesc(subCategory.getDescription())
+                    .desc(subCategory.getDescription())
                     .categoryId(subCategory.getCategoryId())
                     .categoryName(categoryName)
                     .build();
@@ -96,6 +99,7 @@ public class SubCategoryController {
     }
 
     // delete subcategory
+    @DeleteMapping
     public boolean deleteSubCategory(String id){
         // implementation here
         if(id == null || id.isEmpty()) {
@@ -114,6 +118,7 @@ public class SubCategoryController {
     }
 
     // Update Subcategory
+    @PutMapping
     public SubCategoryResponse updateSubCategory(String id, SubCategoryRequest request){
         // implementation here
         if (id == null || request == null) return null;
@@ -123,17 +128,17 @@ public class SubCategoryController {
         for(SubCategory subCategory : subCategoryList){
             if(subCategory.getId().equals(id)){
                 // update fields
-                if (request.getSubCatName() != null) subCategory.setName(request.getSubCatName());
-                if (request.getSubCatDesc() != null) subCategory.setDescription(request.getSubCatDesc());
+                if (request.getName() != null) subCategory.setName(request.getName());
+                if (request.getDescription() != null) subCategory.setDescription(request.getDescription());
 
                 // prepare response
-                SubCategoryResponse response = new SubCategoryResponse();
-                response.setId(subCategory.getId());
-                response.setName(subCategory.getName());
-                response.setSubCatDesc(subCategory.getDescription());
-                response.setCategoryId(subCategory.getCategoryId());
-
-                return response;
+                return SubCategoryResponse.builder()
+                        .id(id)
+                        .categoryId(request.getCategoryId())
+                        .categoryName(request.getName())
+                        .name(request.getName())
+                        .desc(request.getDescription())
+                        .build();
             }
         }
         return null;

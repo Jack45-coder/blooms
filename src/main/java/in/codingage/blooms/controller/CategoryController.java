@@ -1,6 +1,7 @@
 package in.codingage.blooms.controller;
 
 import in.codingage.blooms.Database;
+
 import in.codingage.blooms.dto.CategoryRequest;
 import in.codingage.blooms.dto.CategoryResponse;
 import in.codingage.blooms.models.Category;
@@ -24,6 +25,9 @@ public class CategoryController {
     // ----------- Create Category --------------------
     @PostMapping("/create")
     public void createCategory(@RequestBody CategoryRequest categoryRequest){
+        if(categoryRequest == null){
+            throw new RuntimeException("Request is required!");
+        }
         Category category = new Category();
         category.setName(categoryRequest.getTitle());
         category.setDescription(categoryRequest.getDesc());
@@ -46,17 +50,21 @@ public class CategoryController {
     @GetMapping
     public CategoryResponse getCategory(@RequestParam String categoryId){
         List<Category> categoryList = Database.getInstance().getCategoryList();
-        for(Category category : categoryList){
-            if (category.getId().equals(categoryId)){
-                CategoryResponse categoryResponse = new CategoryResponse();
-                categoryResponse.setImageUrl(category.getImageUrl());
-                categoryResponse.setId(category.getId());
-                categoryResponse.setTitle(category.getName());
-                categoryResponse.setDesc(category.getDescription());
-                return categoryResponse;
-            }
-        }
-        return null;
+
+        return categoryList.stream()
+                .filter(cat -> cat.getId()
+                        .equals(categoryId))
+                .map(cat -> {
+                    CategoryResponse response = new CategoryResponse();
+                    response.setId(cat.getId());
+                    response.setName(cat.getName());
+                    response.setDescription(cat.getDescription());
+                    response.setImageUrl(cat.getImageUrl());
+                    return response;
+                })
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Category not Found!"));
+
     }
 
 
@@ -69,8 +77,8 @@ public class CategoryController {
                 CategoryResponse categoryResponse = new CategoryResponse();
                 categoryResponse.setImageUrl(category.getImageUrl());
                 categoryResponse.setId(category.getId());
-                categoryResponse.setTitle(category.getName());
-                categoryResponse.setDesc(category.getDescription());
+                categoryResponse.setName(category.getName());
+                categoryResponse.setDescription(category.getDescription());
                 categoryResponses.add(categoryResponse);
             }
         }
@@ -115,8 +123,8 @@ public class CategoryController {
                 // prepare response
                 CategoryResponse response = new CategoryResponse();
                 response.setId(category.getId());
-                response.setTitle(category.getName());
-                response.setDesc(category.getDescription());
+                response.setName(category.getName());
+                response.setDescription(category.getDescription());
                 response.setImageUrl(category.getImageUrl());
 
                 return response;  // updated category response
