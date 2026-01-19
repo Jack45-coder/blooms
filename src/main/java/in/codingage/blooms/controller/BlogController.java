@@ -3,126 +3,59 @@ package in.codingage.blooms.controller;
 import in.codingage.blooms.Database;
 import in.codingage.blooms.dto.BlogRequest;
 import in.codingage.blooms.dto.BlogResponse;
+import in.codingage.blooms.dto.CategoryDetail;
 import in.codingage.blooms.models.Blog;
 import in.codingage.blooms.models.Status;
+import in.codingage.blooms.service.BlogService;
+import jakarta.websocket.server.PathParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/blogs")
 public class BlogController {
 
-    public BlogResponse createBlog(BlogRequest request, String authorId){
-        Blog blog = new Blog();
-        blog.setId(String.valueOf(System.currentTimeMillis()));
-        blog.setTitle(request.getTitle());
-        blog.setDescription(request.getDescription());
-        blog.setContent(request.getContent());
-        blog.setAuthorId(authorId);
-        blog.setStatus(Status.INERVIEW.getDisplayName());
-        blog.setActive(true);
-        blog.setCreatedDTTM(LocalDateTime.now());
-        blog.setCategoryMappings(request.getCategoryMappings());
+    @Autowired
+    private BlogService blogService;
 
-        List<Blog> blogs = Database.getInstance().getBlogList();
-        blogs.add(blog);  // store in db
 
-        // response
-        BlogResponse response = new BlogResponse();
-        response.setId(blog.getId());
-        response.setTitle(blog.getTitle());
-        response.setDescription(blog.getDescription());
-        response.setContent(blog.getContent());
-        response.setStatus(blog.getStatus());
-        System.out.println("Blog created successfully.");
-        return response;
+    @GetMapping("/categories")
+    public List<CategoryDetail> getAllCategoriesWithSubCategories(){
+        return blogService.getAllCategoriesWithSubCategories();
     }
 
-    // Get Blog By ID
-    public BlogResponse getBlogById(String blogId){
-        if (blogId == null || blogId.isEmpty()){
-            System.out.println("Blog ID required!");
-            return null;
-        }
-
-        List<Blog> blogs = Database.getInstance().getBlogList();
-        for (Blog blog : blogs){
-            if (blog.isActive() && blog.getId().equals(blogId)){
-                BlogResponse response = new BlogResponse();
-                response.setTitle(blog.getTitle());
-                response.setDescription(blog.getDescription());
-                response.setContent(blog.getContent());
-                response.setAuthorId(blog.getAuthorId());
-                response.setStatus(blog.getStatus());
-                response.setCategoryMappings(blog.getCategoryMappings());
-                response.setCreatedDTTM(blog.getCreatedDTTM());
-
-                return response;
-            }
-        }
-
-        System.out.println("Blog not found!");
-        return null;
-    }
-
-    // Get Blog By AuthorId
-    public List<BlogResponse> getBlogByAuthorId(String authId){
-        if (authId == null || authId.isEmpty()){
-            System.out.println("Blog ID required!");
-            return null;
-        }
-
-        List<Blog> blogs = Database.getInstance().getBlogList();
-        List<BlogResponse> responses = new ArrayList<>();
-        for (Blog blog : blogs){
-
-            if (!blog.isActive()) continue;
-            if (!blog.getAuthorId().equals(authId)) continue;
-
-            BlogResponse response = new BlogResponse();
-
-            response.setTitle(blog.getTitle());
-            response.setDescription(blog.getDescription());
-            response.setContent(blog.getContent());
-            response.setAuthorId(blog.getAuthorId());
-            response.setStatus(Status.PUBLISHED.getDisplayName());
-            response.setCategoryMappings(blog.getCategoryMappings());
-            response.setCreatedDTTM(blog.getCreatedDTTM());
-
-            responses.add(response);
-
-        }
-
-        if (responses.isEmpty()){
-            System.out.println("No blogs found for this author!");
-        }
-
-       return responses;
+    // CREATE BLOG
+    @PostMapping
+    public BlogResponse createBlog(@RequestBody BlogRequest request, @RequestParam String authorId){
+        return blogService.createBlog(request, authorId);
     }
 
     // Get ALl Blog
-    public List<BlogResponse> getAllBlog(){
-        List<Blog> blogs = Database.getInstance().getBlogList();
-        List<BlogResponse> responses = new ArrayList<>();
-        for (Blog blog : blogs){
-            if (blog.isActive()) {
-                BlogResponse response = new BlogResponse();
-                response.setId(blog.getId());
-                response.setTitle(blog.getTitle());
-                response.setDescription(blog.getDescription());
-                response.setContent(blog.getContent());
-                response.setAuthorId(blog.getAuthorId());
-                response.setCategoryMappings(blog.getCategoryMappings());
-                response.setCreatedDTTM(blog.getCreatedDTTM());
+    @GetMapping("/all")
+    public List<BlogResponse> getAllBlogs(){
+        return blogService.getAllBlogs();
+    }
 
-                responses.add(response);
-            }
-        }
-        return responses;
+    // Get Blog By ID
+    @GetMapping("/{blogId}")
+    public BlogResponse getBlogById(@PathVariable String blogId){
+        return blogService.getBlogById(blogId);
+    }
+
+    // Get Blog By AuthorId
+    @GetMapping("/{authorId}")
+    public List<BlogResponse> getBlogByAuthorId(@PathVariable String authId){
+        return blogService.getBlogByAuthorId(authId);
     }
 
     // Delete Blog By ID
-    public boolean deleteBlogById(String blogId){
+    @DeleteMapping("/{blogId}")
+    public boolean deleteBlogById(@PathVariable String blogId){
+        return blogService.deleteBlogById(blogId);
+
         if (blogId == null || blogId.isEmpty()){
             System.out.println("Blog ID required!");
             return false;

@@ -6,6 +6,8 @@ import in.codingage.blooms.dto.SubCategoryResponse;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.Status;
 import in.codingage.blooms.models.SubCategory;
+import in.codingage.blooms.service.SubCategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -13,26 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/category/subcategory")
+@RequestMapping("api/subcategories")
 public class SubCategoryController {
     // TODO: 09/01/2026 complete crud here
+
+    @Autowired
+    private SubCategoryService subCategoryService;
 
     // create SubCategory
     @PostMapping
     public void createSubcategory(SubCategoryRequest subCategoryRequest){
-        // implementation here
-        SubCategory subCategory = new SubCategory();
-        subCategory.setName(subCategoryRequest.getName());
-        subCategory.setDescription(subCategoryRequest.getDescription());
-        subCategory.setCategoryId(subCategoryRequest.getCategoryId());
-        subCategory.setId(String.valueOf(System.currentTimeMillis()));
-        subCategory.setCreatedDTTM(LocalDateTime.now());
-        subCategory.setCreatedBy("ADMIN");
-        subCategory.setStatus(Status.PUBLISHED.getDisplayName());
-        subCategory.setActive(true);
-
-        // save to db
-        Database.getInstance().getSubCategoryList().add(subCategory);
+        subCategoryService.createSubCategory(subCategoryRequest);
     }
 
     // read SubCategory

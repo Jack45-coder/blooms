@@ -59,7 +59,7 @@ public class UiClient {
 //        System.out.println(blog.getDescription());
 //        System.out.println(blog.getCategoryMappings());
 
-//          List<BlogResponse> blogs = blogController.getAllBlog();
+//          List<BlogResponse> blogs = blogController.getAllBlogs();
 //          if(blogs.isEmpty()){
 //              System.out.println("No blog found!");
 //          }else {

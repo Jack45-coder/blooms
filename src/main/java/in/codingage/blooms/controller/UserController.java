@@ -31,6 +31,7 @@ public class UserController {
 
         // create user
         User user = new User();
+        user.setId(String.valueOf(System.currentTimeMillis()));
         user.setName(userRequest.getName());
         user.setUsername(userRequest.getUsername());
         user.setEmail(userRequest.getEmail());

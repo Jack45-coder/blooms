@@ -1,6 +1,8 @@
 package in.codingage.blooms.models;
 
+
 import java.util.List;
+
 
 public class CategoryMapping {
     private String categoryId;
