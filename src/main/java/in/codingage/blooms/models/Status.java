@@ -4,8 +4,8 @@ package in.codingage.blooms.models;
 
 public enum Status {
     PUBLISHED("Published"),
-    INERVIEW("In Review"),
-    REHECTED("Rejected"),
+    INREVIEW("In Review"),
+    REJECTED("Rejected"),
     UPDATED("Updated"),;
 
     private final String displayName;

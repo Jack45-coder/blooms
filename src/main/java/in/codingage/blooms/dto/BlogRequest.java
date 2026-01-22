@@ -12,6 +12,6 @@ public class BlogRequest {
     private String title;
     private String description;
     private String content;
+    private String authorId;
     private List<CategoryMapping> categoryMappings;
-
 }

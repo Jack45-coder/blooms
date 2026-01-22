@@ -13,7 +13,6 @@ import in.codingage.blooms.repository.CategoryRepository;
 import in.codingage.blooms.repository.SubCategoryRepository;
 import in.codingage.blooms.service.BlogService;
 import in.codingage.blooms.utlils.RandomIdUtils;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +31,20 @@ public class BlogServiceImpl implements BlogService{
 
     @Autowired
     private SubCategoryRepository subCategoryRepository;
+
+    // Helper method to map Blog to BlogResponse
+    private BlogResponse mapToResponse(Blog blog) {
+        BlogResponse response = new BlogResponse();
+        response.setId(blog.getId());
+        response.setTitle(blog.getTitle());
+        response.setDescription(blog.getDescription());
+        response.setContent(blog.getContent());
+        response.setStatus(blog.getStatus());
+        response.setAuthorId(blog.getAuthorId());
+        response.setCreatedDTTM(blog.getCreatedDTTM());
+        response.setCategoryMappings(blog.getCategoryMappings());
+        return response;
+    }
 
     public List<CategoryDetail> getAllCategoriesWithSubCategories() {
         List<CategoryDetail> categoryDetails = new ArrayList<>();
@@ -58,6 +71,15 @@ public class BlogServiceImpl implements BlogService{
 
     //Implementation of CREATE Blogs By AuthorID
     public BlogResponse createBlog(BlogRequest request, String authorId){
+
+        if (request == null || request.getTitle() == null || request.getTitle().isEmpty()){
+            throw new IllegalArgumentException("Blog title is required!");
+        }
+
+        if (authorId == null || authorId.isEmpty()){
+            throw new IllegalArgumentException("Author ID is required!");
+        }
+
         Blog blog = new Blog();
         blog.setId(RandomIdUtils.generateRandom(7));
         blog.setAuthorId(authorId);
@@ -65,20 +87,13 @@ public class BlogServiceImpl implements BlogService{
         blog.setDescription(request.getDescription());
         blog.setContent(request.getContent());
         blog.setActive(true);
-        blog.setStatus(Status.INERVIEW.getDisplayName());
+        blog.setStatus(Status.PUBLISHED.toString());
         blog.setCreatedDTTM(LocalDateTime.now());
         blog.setCategoryMappings(request.getCategoryMappings());
 
         Blog saveBlog = blogRepository.save(blog);
 
-        BlogResponse response = new BlogResponse();
-        response.setId(saveBlog.getId());
-        response.setTitle(saveBlog.getTitle());
-        response.setDescription(saveBlog.getDescription());
-        response.setContent(saveBlog.getContent());
-        response.setStatus(saveBlog.getStatus());
-
-        return response;
+        return mapToResponse(saveBlog);
     }
 
     // Implementation Of Find all Blogs:

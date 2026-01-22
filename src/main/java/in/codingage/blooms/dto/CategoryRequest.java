@@ -6,9 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryRequest {
-    private String title;
-    private String desc;
+    private String name;
+    private String description;
     private String imageUrl;
-
-
 }

@@ -3,7 +3,7 @@ import { api, postForm } from "./apiClient";
 
 const initialRegister = { name: "", email: "", password: "", phone: "" };
 const initialLogin = { phone: "", password: "" };
-const initialCategory = { title: "", desc: "", categoryUrl: "" };
+const initialCategory = { name: "", description: "", imageUrl: "" };
 const initialSubCategory = { categoryId: "", name: "", description: "" };
 const initialCategoryModel = {
   id: "",
@@ -29,7 +29,13 @@ const initialBlogModel = {
   description: "",
   content: "",
   status: "",
-  authorId: ""
+  authorId: "",
+  categoryMappings: [
+      {
+          categoryId: "",
+          subCategoryIds: []
+      }
+  ]
 };
 
 function App() {
@@ -48,10 +54,15 @@ function App() {
   const [modalType, setModalType] = useState(null); // e.g. "category-create", "category-edit", ...
   const [modalData, setModalData] = useState(null);
   const [modalSubmitting, setModalSubmitting] = useState(false);
+  const [subcategories, setSubcategories] = useState([]);
+  const [blogs, setBlogs] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [isSubCategoryEditOpen, setIsSubCategoryEditOpen] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
       fetchCategories();
+      fetchSubCategories();
       fetchBlogCategories();
     }
   }, [currentUser]);
@@ -72,6 +83,29 @@ function App() {
     setSubCategoryForm({ ...subCategoryForm, [e.target.name]: e.target.value });
   };
 
+  // Blog-specific handlers
+  const handleBlogCategoryChange = (e) => {
+      const categoryId = e.target.value;
+      setModalData(prev => ({
+          ...prev,
+          categoryMappings: [{
+              categoryId,
+              subCategoryIds: []
+          }]
+      }));
+  };
+
+  const handleBlogSubCategoryChange = (e) => {
+      const selectedSubCategories = Array.from(e.target.selectedOptions, option => option.value);
+      setModalData(prev => ({
+          ...prev,
+          categoryMappings: [{
+              categoryId: prev?.categoryMappings?.[0]?.categoryId || "",
+              subCategoryIds: selectedSubCategories
+          }]
+      }));
+  };
+
   const openCategoryCreateModal = () => {
     setModalType("category-create");
     setModalData({
@@ -81,14 +115,14 @@ function App() {
   };
 
   const openCategoryEditModal = (categoryRow) => {
-    // categoryRow shape is CategoryResponse: id, title, desc, categoryUrl
+    // categoryRow shape is CategoryResponse: id, name, description, imageUrl
     setModalType("category-edit");
     setModalData({
       ...initialCategoryModel,
       id: categoryRow.id || "",
-      name: categoryRow.title || "",
-      description: categoryRow.desc || "",
-      imageUrl: categoryRow.categoryUrl || "",
+      name: categoryRow.name || "",
+      description: categoryRow.description || "",
+      imageUrl: categoryRow.imageUrl || "",
       createdBy: currentUser?.name || ""
     });
   };
@@ -115,10 +149,10 @@ function App() {
     });
   };
 
-  const openSubCategoryDeleteModal = () => {
+  const openSubCategoryDeleteModal = (subcategoryRow) => {
     setModalType("subcategory-delete");
     setModalData({
-      id: ""
+      id: subcategoryRow.id || ""
     });
   };
 
@@ -153,10 +187,10 @@ function App() {
   const handleModalChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (!modalData) return;
-    setModalData({
-      ...modalData,
-      [name]: type === "checkbox" ? checked : value
-    });
+    setModalData(prev => ({
+        ...prev,
+        [name]: type ==="checkbox" ? checked : value
+    }));
   };
 
   const handleRegister = async (e) => {
@@ -215,6 +249,15 @@ function App() {
     }
   };
 
+  const fetchSubCategories = async () => {
+    try{
+    const response =await api.get("/subcategories");
+    setSubcategories(response.data || []);
+    }catch (err){
+     console.error("Failed to fetch subCategories: ", err);
+     }
+  };
+
   const handleCreateCategory = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -234,12 +277,27 @@ function App() {
     setMessage("");
     setError("");
     try {
-      await api.delete("/categories", { params: { categoryId: id } });
+      await api.delete(`/categories/${id}`);
+      setCategories(prevCategories => prevCategories.filter(category => category.id !== id));
       setMessage("Category deleted (soft delete).");
       fetchCategories();
     } catch (err) {
       console.error(err);
       setError("Failed to delete category.");
+    }
+  };
+
+  const handleDeleteSubCategory = async (id) => {
+      setMessage("");
+      setError("");
+    try{
+        await api.delete(`/subcategories/${id}`);
+        setSubcategories(prevSubCategories => prevSubCategories.filter(subcategory => subcategory.id !== id));
+        setMessage("subCategory deleted (soft delete)")
+        closeModal();
+    }catch(err){
+     console.error(err);
+     setError("Failed to delete subCategory!")
     }
   };
 
@@ -249,10 +307,11 @@ function App() {
     setError("");
     try {
       // This endpoint currently expects form-url-encoded parameters
-      await postForm("/subcategories", subCategoryForm);
+      await api.post("/subcategories", subCategoryForm);
       setMessage("SubCategory create request sent (see backend logs/db).");
       setSubCategoryForm(initialSubCategory);
       fetchBlogCategories();
+      closeModal();
     } catch (err) {
       console.error(err);
       setError("Failed to create subcategory.");
@@ -264,7 +323,7 @@ function App() {
     setCategories([]);
     setBlogCategories([]);
     setMessage("");
-    setError("");
+    setError("");lg9FWW
   };
 
   const handleModalSubmit = async (e) => {
@@ -407,6 +466,7 @@ function App() {
             <SaaSDashboard
               user={currentUser}
               categories={categories}
+              subcategories={subcategories}
               blogCategories={blogCategories}
               onOpenCategoryCreate={openCategoryCreateModal}
               onOpenCategoryEdit={openCategoryEditModal}
@@ -626,6 +686,40 @@ function App() {
                       onChange={handleModalChange}
                     />
                   </label>
+                  <label>
+                      Category *
+                      <select onChange={handleBlogCategoryChange}
+                       value={modalData.categoryMappings?.[0]?.categoryId || ""}
+                       required
+                      >
+                        <option value="">Select</option>
+                        {categories.map(category => (
+                            <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    {modalData.categoryMappings?.[0]?.categoryId && (
+                          <label>
+                            SubCategory
+                            <select
+                              multiple
+                              value={modalData.categoryMappings?.[0]?.subCategoryIds || []}
+                              onChange={handleBlogSubCategoryChange}
+                            >
+                              <option value="">-- Select --</option>
+                              {subcategories
+                                .filter(sub => sub.categoryId === modalData.categoryMappings[0].categoryId)
+                                .map(sub => (
+                                  <option key={sub.id} value={sub.id}>
+                                    {sub.name}
+                                  </option>
+                                ))
+                              }
+                            </select>
+                          </label>
+                        )}
                 </>
               )}
 
@@ -808,10 +902,10 @@ function Dashboard({
           </p>
           <form onSubmit={onCreateCategory} className="form">
             <label>
-              Title
+              Name
               <input
-                name="title"
-                value={categoryForm.title}
+                name="name"
+                value={categoryForm.name}
                 onChange={onCategoryChange}
                 required
               />
@@ -819,16 +913,16 @@ function Dashboard({
             <label>
               Description
               <textarea
-                name="desc"
-                value={categoryForm.desc}
+                name="description"
+                value={categoryForm.description}
                 onChange={onCategoryChange}
               />
             </label>
             <label>
               Image URL
               <input
-                name="categoryUrl"
-                value={categoryForm.categoryUrl}
+                name="imageUrl"
+                value={categoryForm.imageUrl}
                 onChange={onCategoryChange}
               />
             </label>
@@ -893,8 +987,8 @@ function Dashboard({
               {categories.map((c) => (
                 <li key={c.id} className="list-item">
                   <div>
-                    <strong>{c.title}</strong>
-                    <div className="muted small">{c.desc}</div>
+                    <strong>{c.name}</strong>
+                    <div className="muted small">{c.description}</div>
                     <div className="muted small">ID: {c.id}</div>
                   </div>
                   <button
@@ -1010,10 +1104,10 @@ function ManageTabs({
             </p>
             <form onSubmit={onCreateCategory} className="form">
               <label>
-                Title
+                Name
                 <input
-                  name="title"
-                  value={categoryForm.title}
+                  name="name"
+                  value={categoryForm.name}
                   onChange={onCategoryChange}
                   required
                 />
@@ -1021,16 +1115,16 @@ function ManageTabs({
               <label>
                 Description
                 <textarea
-                  name="desc"
-                  value={categoryForm.desc}
+                  name="description"
+                  value={categoryForm.description}
                   onChange={onCategoryChange}
                 />
               </label>
               <label>
                 Image URL
                 <input
-                  name="categoryUrl"
-                  value={categoryForm.categoryUrl}
+                  name="imageUrl"
+                  value={categoryForm.imageUrl}
                   onChange={onCategoryChange}
                 />
               </label>
@@ -1053,8 +1147,8 @@ function ManageTabs({
                 {categories.map((c) => (
                   <li key={c.id} className="list-item">
                     <div>
-                      <strong>{c.title}</strong>
-                      <div className="muted small">{c.desc}</div>
+                      <strong>{c.name}</strong>
+                      <div className="muted small">{c.description}</div>
                       <div className="muted small">ID: {c.id}</div>
                     </div>
                     <div className="list-actions">
@@ -1190,6 +1284,7 @@ function ManageTabs({
 function SaaSDashboard({
   user,
   categories,
+  subcategories,
   blogCategories,
   onOpenCategoryCreate,
   onOpenCategoryEdit,
@@ -1257,8 +1352,8 @@ function SaaSDashboard({
                 categories.map((c) => (
                   <tr key={c.id}>
                     <td>{c.id}</td>
-                    <td>{c.title}</td>
-                    <td>{c.desc}</td>
+                    <td>{c.name}</td>
+                    <td>{c.description}</td>
                     <td>
                       <div className="list-actions">
                         <button
@@ -1302,12 +1397,37 @@ function SaaSDashboard({
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan={4} className="muted small">
-                  Placeholder row – use the CTAs above to open model-based forms
-                  and wire them to your own subcategory APIs.
-                </td>
-              </tr>
+                {!subcategories || subcategories.length === 0  ? (
+                    <tr>
+                     <td colSpan={4} className="muted small">
+                         No subcategories found
+                     </td>
+                    </tr>
+                ):(
+                    subcategories.map((sub) => (
+                         <tr key={sub.id}>
+                             <td>{sub.id}</td>
+                             <td>{sub.categoryId}</td>
+                             <td>{sub.name}</td>
+                             <td>
+                                 <div className="list-actions">
+                                     <button
+                                       className="btn-sm"
+                                       onClick={() => onOpenSubCategoryEdit(sub)}
+                                     >
+                                       Edit
+                                     </button>
+                                     <button
+                                       className="btn-sm danger"
+                                       onClick={() => onOpenSubCategoryDelete(sub.id)}
+                                     >
+                                       Delete
+                                     </button>
+                                   </div>
+                             </td>
+                         </tr>
+                    ))
+                )}
             </tbody>
           </table>
         </div>
@@ -1443,4 +1563,3 @@ function SaaSDashboard({
 }
 
 export default App;
-

@@ -7,18 +7,6 @@ import lombok.Setter;
 @Setter
 public class UserResponse {
     private String id;
-    private String username;
-    private String email;
     private String name;
-    private String profileUrl;
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", profileUrl='" + profileUrl + '\'' +
-                '}';
-    }
+    private String email;
 }

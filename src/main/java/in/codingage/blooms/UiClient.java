@@ -14,7 +14,7 @@ public class UiClient {
     public static void main(String[] args) {
         System.out.println("UI Client Started");
         // Register - register a new user, we will also have an admin user
-        // login - login existing user
+        // signin - signin existing user
         // admin dashboard - manage categories, sub-categories, blogs, users
         // user dashboard - view blogs, profile, settings, create blogs
 

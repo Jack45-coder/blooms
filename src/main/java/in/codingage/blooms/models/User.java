@@ -3,19 +3,22 @@ package in.codingage.blooms.models;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+//@Table(name = "users")
+//@Entity
 
 @Getter
 @Setter
-//@Table(name = "users")
-//@Entity
+@Document(collection = "users")
 public class User {
     @Id
     private String id;
-    private String username;
+    private Role role;
+    private String phone;
     private String email;
     private String name;
     private String profileUrl;
     private String password;
     private boolean active;
-
 }

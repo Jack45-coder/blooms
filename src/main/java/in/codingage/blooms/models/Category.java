@@ -8,13 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
+
+//@Table(name = "categories")
 @Getter
 @Setter
-//@Table(name = "categories")
-
 @Document(collection = "categories")
 public class Category {
-
     @Id
     private String id;
     private String name;

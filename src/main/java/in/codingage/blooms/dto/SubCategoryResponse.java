@@ -10,7 +10,6 @@ import lombok.Setter;
 public class SubCategoryResponse {
     private String id;
     private String categoryId;
-    private String categoryName;
     private String name;
     private String desc;
 

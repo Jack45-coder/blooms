@@ -7,11 +7,9 @@ import in.codingage.blooms.dto.CategoryDetail;
 import in.codingage.blooms.models.Blog;
 import in.codingage.blooms.models.Status;
 import in.codingage.blooms.service.BlogService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,8 +27,8 @@ public class BlogController {
 
     // CREATE BLOG
     @PostMapping
-    public BlogResponse createBlog(@RequestBody BlogRequest request, @RequestParam String authorId){
-        return blogService.createBlog(request, authorId);
+    public BlogResponse createBlog(@RequestBody BlogRequest request){
+        return blogService.createBlog(request, request.getAuthorId());
     }
 
     // Get ALl Blog
@@ -55,25 +53,6 @@ public class BlogController {
     @DeleteMapping("/{blogId}")
     public boolean deleteBlogById(@PathVariable String blogId){
         return blogService.deleteBlogById(blogId);
-
-        if (blogId == null || blogId.isEmpty()){
-            System.out.println("Blog ID required!");
-            return false;
-        }
-        List<Blog> blogs = Database.getInstance().getBlogList();
-        for (Blog blog : blogs){
-            if (blog.getId().equals(blogId)){
-                if(!blog.isActive()){
-                    System.out.println("Blog already deleted!");
-                    return false;
-                }
-                blog.setActive(false);
-                System.out.println("Blog deleted successfully!");
-                return true;
-            }
-        }
-        System.out.println("Blog not found!");
-        return false;
     }
 
     // Delete Blog By Author ID
