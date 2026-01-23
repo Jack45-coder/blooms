@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService {
@@ -73,6 +74,25 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         subCategory.setActive(false);
         subCategoryRepository.save(subCategory);
         return true;
+    }
+
+    public SubCategoryResponse updateSubcategory(SubCategoryRequest request, String id){
+        if (request == null || id == null || id.isEmpty()){
+            throw new IllegalArgumentException("Subcategory ID required!");
+        }
+
+       SubCategory subCategory = subCategoryRepository.findById(id)
+               .orElseThrow(() -> new RuntimeException("SubCategory not found: " + id));
+
+        if(!subCategory.isActive()){
+            throw new RuntimeException("Subcategory is deleted! not updated!");
+        }
+        if (request.getName() != null) subCategory.setName(request.getName());
+        if (request.getDescription() != null) subCategory.setDescription(request.getDescription());
+        if (request.getCategoryId() != null) subCategory.setCategoryId(request.getCategoryId());
+
+        SubCategory updatedSubCategory = subCategoryRepository.save(subCategory);
+        return mapToResponse(updatedSubCategory);
     }
 
 

@@ -141,18 +141,23 @@ function App() {
     });
   };
 
-  const openSubCategoryEditModal = () => {
+  const openSubCategoryEditModal = (subcategoryRow) => {
     // For now, let the user type the ID they want to edit
     setModalType("subcategory-edit");
     setModalData({
-      ...initialSubCategoryModel
+      ...initialSubCategoryModel,
+      id : subcategoryRow.id || "",
+      categoryId : subcategoryRow.categoryId || "",
+      name : subcategoryRow.name || "",
+      description : subcategoryRow.description || "",
+      createdBy : subcategoryRow.createdBy || "",
     });
   };
 
   const openSubCategoryDeleteModal = (subcategoryRow) => {
     setModalType("subcategory-delete");
     setModalData({
-      id: subcategoryRow.id || ""
+      id: subcategoryRow.id || "",
     });
   };
 
@@ -174,7 +179,7 @@ function App() {
   const openBlogDeleteModal = () => {
     setModalType("blog-delete");
     setModalData({
-      id: ""
+
     });
   };
 
@@ -266,7 +271,7 @@ function App() {
       await api.post("/categories", categoryForm);
       setMessage("Category created.");
       setCategoryForm(initialCategory);
-      fetchCategories();
+      await fetchCategories();
     } catch (err) {
       console.error(err);
       setError("Failed to create category.");
@@ -280,7 +285,7 @@ function App() {
       await api.delete(`/categories/${id}`);
       setCategories(prevCategories => prevCategories.filter(category => category.id !== id));
       setMessage("Category deleted (soft delete).");
-      fetchCategories();
+      await fetchCategories();
     } catch (err) {
       console.error(err);
       setError("Failed to delete category.");
@@ -293,6 +298,8 @@ function App() {
     try{
         await api.delete(`/subcategories/${id}`);
         setSubcategories(prevSubCategories => prevSubCategories.filter(subcategory => subcategory.id !== id));
+        await fetchCategories();
+        await fetchBlogCategories();
         setMessage("subCategory deleted (soft delete)")
         closeModal();
     }catch(err){
@@ -308,9 +315,10 @@ function App() {
     try {
       // This endpoint currently expects form-url-encoded parameters
       await api.post("/subcategories", subCategoryForm);
+      await fetchSubCategories();
+      await fetchBlogCategories();
       setMessage("SubCategory create request sent (see backend logs/db).");
       setSubCategoryForm(initialSubCategory);
-      fetchBlogCategories();
       closeModal();
     } catch (err) {
       console.error(err);
@@ -351,6 +359,7 @@ function App() {
           break;
         case "subcategory-create":
           await api.post("/subcategories", modalData);
+          await fetchSubCategories();
           setMessage("SubCategory create API called.");
           break;
         case "subcategory-edit":
@@ -359,18 +368,23 @@ function App() {
           break;
         case "subcategory-delete":
           await api.delete(`/subcategories/${modalData.id}`);
+          await fetchSubCategories();
           setMessage("SubCategory delete API called.");
           break;
         case "blog-create":
           await api.post("/blogs", modalData);
+          await fetchBlogCategories();
+          if (typeof fetchBlogs === 'function') await fetchBlogs();
           setMessage("Blog create API called.");
           break;
         case "blog-edit":
           await api.put(`/blogs/${modalData.id}`, modalData);
+          await fetchBlogCategories();
           setMessage("Blog update API called.");
           break;
         case "blog-delete":
           await api.delete(`/blogs/${modalData.id}`);
+          await fetchBlogCategories();
           setMessage("Blog delete API called.");
           break;
         default:
@@ -1033,6 +1047,8 @@ function Dashboard({
           )}
         </div>
       </div>
+      {/* New Blog Section - Add This */}
+
     </div>
   );
 }
@@ -1412,14 +1428,14 @@ function SaaSDashboard({
                              <td>
                                  <div className="list-actions">
                                      <button
-                                       className="btn-sm"
+                                       className="btn small"
                                        onClick={() => onOpenSubCategoryEdit(sub)}
                                      >
                                        Edit
                                      </button>
                                      <button
-                                       className="btn-sm danger"
-                                       onClick={() => onOpenSubCategoryDelete(sub.id)}
+                                       className="btn small"
+                                       onClick={() => onOpenSubCategoryDelete(sub)}
                                      >
                                        Delete
                                      </button>
@@ -1482,13 +1498,13 @@ function SaaSDashboard({
                         className="btn small"
                         onClick={onOpenBlogEdit}
                       >
-                        View Blogs
+                        Edit
                       </button>
                       <button
                         className="btn small"
                         onClick={onOpenBlogDelete}
                       >
-                        Configure
+                        Delete
                       </button>
                     </div>
                   </td>

@@ -27,7 +27,7 @@ public class SubCategoryController {
         return subCategoryService.createSubCategory(subCategoryRequest);
     }
 
-    @GetMapping()
+    @GetMapping
     public List<SubCategoryResponse> getSubCategories(){
         return subCategoryService.getAll();
     }
@@ -35,6 +35,11 @@ public class SubCategoryController {
     @DeleteMapping("/{subCategoryId}")
     public boolean deleteSubCategory(@PathVariable String subCategoryId){
         return subCategoryService.delete(subCategoryId);
+    }
+
+    @PutMapping("/{id}")
+    public SubCategoryResponse updateSubcategory(@PathVariable SubCategoryRequest request, String id){
+        return subCategoryService.updateSubcategory(request, id);
     }
 
 //    // read SubCategory

@@ -11,4 +11,6 @@ public interface SubCategoryService {
     List<SubCategoryResponse> getAll();
 
     boolean delete(String subCategoryId);
+
+    SubCategoryResponse updateSubcategory(SubCategoryRequest request, String id);
 }

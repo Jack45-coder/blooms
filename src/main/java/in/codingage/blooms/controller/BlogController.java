@@ -55,67 +55,75 @@ public class BlogController {
         return blogService.deleteBlogById(blogId);
     }
 
-    // Delete Blog By Author ID
-    public boolean deleteByAuthID(String authId){
-        if (authId == null || authId.isEmpty()){
-            System.out.println("Author ID required!");
-            return false;
-        }
 
-        List<Blog> blogs = Database.getInstance().getBlogList();
-        boolean foundActiveBlog = false;
 
-        for (Blog blog : blogs){
-            if (blog.getAuthorId().equals(authId) && blog.isActive()){
-                    blog.setActive(false);
-                    foundActiveBlog = true;
-            }
-        }
-        if (foundActiveBlog) {
-            System.out.println("All blogs of author deleted successfully.");
-            return true;
-        }
 
-        System.out.println("No active blogs found for this author!");
-        return false;
-    }
 
-    // Update Blog By ID
-    public BlogResponse updateBlogById(BlogRequest request , String blogId){
-        if (blogId == null || blogId.isEmpty()){
-            System.out.println("Blog ID required!");
-            return null;
-        }
-        if (request == null){
-            System.out.println("Request cannot be null!");
-            return null;
-        }
 
-        List<Blog> blogs = Database.getInstance().getBlogList();
-        for (Blog blog : blogs) {
-            if (!blog.isActive()) continue;
-            if (blog.getId().equals(blogId)) {
-                if (request.getTitle() != null) blog.setTitle(request.getTitle());
-                if (request.getDescription() != null) blog.setDescription(request.getDescription());
-                if (request.getContent() != null) blog.setContent(request.getContent());
-                if (request.getCategoryMappings() != null) blog.setCategoryMappings(request.getCategoryMappings());
 
-                BlogResponse response = new BlogResponse();
 
-                response.setId(blog.getId());
-                response.setTitle(blog.getTitle());
-                response.setDescription(blog.getDescription());
-                response.setContent(blog.getContent());
-                response.setAuthorId(blog.getAuthorId());
-                response.setStatus(Status.UPDATED.getDisplayName());
-                response.setCategoryMappings(blog.getCategoryMappings());
-                response.setCreatedDTTM(blog.getCreatedDTTM());
 
-                return response;
-            }
-        }
-
-        System.out.println("Blog not found!");
-        return null;
-    }
+//    // Delete Blog By Author ID
+//    public boolean deleteByAuthID(String authId){
+//        if (authId == null || authId.isEmpty()){
+//            System.out.println("Author ID required!");
+//            return false;
+//        }
+//
+//        List<Blog> blogs = Database.getInstance().getBlogList();
+//        boolean foundActiveBlog = false;
+//
+//        for (Blog blog : blogs){
+//            if (blog.getAuthorId().equals(authId) && blog.isActive()){
+//                    blog.setActive(false);
+//                    foundActiveBlog = true;
+//            }
+//        }
+//        if (foundActiveBlog) {
+//            System.out.println("All blogs of author deleted successfully.");
+//            return true;
+//        }
+//
+//        System.out.println("No active blogs found for this author!");
+//        return false;
+//    }
+//
+//    // Update Blog By ID
+//    public BlogResponse updateBlogById(BlogRequest request , String blogId){
+//        if (blogId == null || blogId.isEmpty()){
+//            System.out.println("Blog ID required!");
+//            return null;
+//        }
+//        if (request == null){
+//            System.out.println("Request cannot be null!");
+//            return null;
+//        }
+//
+//        List<Blog> blogs = Database.getInstance().getBlogList();
+//        for (Blog blog : blogs) {
+//            if (!blog.isActive()) continue;
+//            if (blog.getId().equals(blogId)) {
+//                if (request.getTitle() != null) blog.setTitle(request.getTitle());
+//                if (request.getDescription() != null) blog.setDescription(request.getDescription());
+//                if (request.getContent() != null) blog.setContent(request.getContent());
+//                if (request.getCategoryMappings() != null) blog.setCategoryMappings(request.getCategoryMappings());
+//
+//                BlogResponse response = new BlogResponse();
+//
+//                response.setId(blog.getId());
+//                response.setTitle(blog.getTitle());
+//                response.setDescription(blog.getDescription());
+//                response.setContent(blog.getContent());
+//                response.setAuthorId(blog.getAuthorId());
+//                response.setStatus(Status.UPDATED.getDisplayName());
+//                response.setCategoryMappings(blog.getCategoryMappings());
+//                response.setCreatedDTTM(blog.getCreatedDTTM());
+//
+//                return response;
+//            }
+//        }
+//
+//        System.out.println("Blog not found!");
+//        return null;
+//    }
 }

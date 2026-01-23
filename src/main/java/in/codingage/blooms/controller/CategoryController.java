@@ -23,7 +23,7 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-
+ 
     // CRUD - Create, Read, Update, Delete
     // supplier<Integer> capacitySupplier = () -> (int) (Math.random() * 10) + 1;
 
