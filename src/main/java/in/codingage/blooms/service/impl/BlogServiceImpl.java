@@ -15,6 +15,7 @@ import in.codingage.blooms.service.BlogService;
 import in.codingage.blooms.utlils.RandomIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class BlogServiceImpl implements BlogService{
 
     // Implementation Of Find all Blogs:
     public List<BlogResponse> getAllBlogs(){
-        List<Blog> blogs = blogRepository.findByIsActiveTrue();
+        List<Blog> blogs = blogRepository.findByActiveTrue();
         List<BlogResponse> responses = new ArrayList<>();
         for (Blog blog : blogs){
             BlogResponse response = new BlogResponse();
@@ -123,7 +124,7 @@ public class BlogServiceImpl implements BlogService{
 
         Blog blog = blogRepository
                 .findById(blogId)
-                .filter(Blog::isActive)
+                .filter(b -> b.isActive())
                 .orElseThrow(() -> new RuntimeException("Blog not found or inactive!"));
 
         BlogResponse response = new BlogResponse();
@@ -157,7 +158,14 @@ public class BlogServiceImpl implements BlogService{
 
     // Implementation Of Delete Blog By blogID:
     public boolean deleteBlogById(String blogId){
+        if(blogId == null || blogId.isEmpty()){
+            throw new IllegalArgumentException("Blog ID required!");
+        }
 
-        return false;
+        Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new RuntimeException("Blog not found!"));
+
+        blog.setActive(false);
+        blogRepository.save(blog);
+        return true;
     }
 }

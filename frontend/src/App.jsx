@@ -64,6 +64,7 @@ function App() {
       fetchCategories();
       fetchSubCategories();
       fetchBlogCategories();
+      fetchBlogs();
     }
   }, [currentUser]);
 
@@ -169,19 +170,57 @@ function App() {
     });
   };
 
-  const openBlogEditModal = () => {
+  const openBlogEditModal = (blogRow) => {
     setModalType("blog-edit");
     setModalData({
-      ...initialBlogModel
+//       ...initialBlogModel,
+      id: blogRow.id || "",
+      title: blogRow.title || "",
+      description: blogRow.description || "",
+      content: blogRow.content || "",
+      status: blogRow.status || "DRAFT",
+      authorId: blogRow.authorId || "",
+      categoryMappings: blogRow.categoryMappings || [{ categoryId: "", subCategoryIds: [] }]
     });
   };
 
-  const openBlogDeleteModal = () => {
+  const openBlogDeleteModal = (blogRow) => {
     setModalType("blog-delete");
     setModalData({
-
+       id: blogRow.id || "",
+       title: blogRow.title || "UnKnown"
     });
   };
+
+  const openBlogViewModal = async (blogRow) => {
+   try{
+      setModalType("blog-view-loading");
+      setModalData({ id: blogRow.id, title: blogRow.title });
+
+      const response = await api.get(`/blogs/${blogRow.id}`);
+      const blogDetails = response.data;
+
+      setModalType("blog-view");
+      setModalData({
+          id: blogDetails.id || blogDetails._id || "",
+          title: blogDetails.title || "",
+          description: blogDetails.description || "",
+          content: blogDetails.content || "",
+          createdDTTM: blogDetails.createdDTTM || "",
+          status: blogDetails.status || "",
+          authorId: blogDetails.authorId || "",
+          categoryMappings: blogDetails.categoryMappings || [{ categoryId: "", subCategoryIds: [] }],
+      });
+   }catch(err){
+    console.error("Failed to fetch blog details:", err);
+    setModalType("blog-view-error");
+    setModalData({
+          id: blogRow.id,
+          title: blogRow.title,
+          error: "Failed to load blog details"
+     });
+   }
+}
 
   const closeModal = () => {
     setModalType(null);
@@ -262,6 +301,16 @@ function App() {
      console.error("Failed to fetch subCategories: ", err);
      }
   };
+
+  const fetchBlogs = async () => {
+      try{
+           const res = await api.get("/blogs/all");
+           setBlogs(res.data || []);
+      }catch(err){
+           console.error("Failed to fetch blogs: " , err)
+      }
+  };
+
 
   const handleCreateCategory = async (e) => {
     e.preventDefault();
@@ -373,20 +422,26 @@ function App() {
           break;
         case "blog-create":
           await api.post("/blogs", modalData);
+          await fetchBlogs();
           await fetchBlogCategories();
           if (typeof fetchBlogs === 'function') await fetchBlogs();
           setMessage("Blog create API called.");
           break;
         case "blog-edit":
           await api.put(`/blogs/${modalData.id}`, modalData);
+          await fetchBlogs();
           await fetchBlogCategories();
           setMessage("Blog update API called.");
           break;
         case "blog-delete":
           await api.delete(`/blogs/${modalData.id}`);
+          await fetchBlogs();
           await fetchBlogCategories();
           setMessage("Blog delete API called.");
           break;
+        case "blog-view":
+
+           break;
         default:
           break;
       }
@@ -481,6 +536,7 @@ function App() {
               user={currentUser}
               categories={categories}
               subcategories={subcategories}
+              blogs={blogs}
               blogCategories={blogCategories}
               onOpenCategoryCreate={openCategoryCreateModal}
               onOpenCategoryEdit={openCategoryEditModal}
@@ -491,7 +547,10 @@ function App() {
               onOpenBlogCreate={openBlogCreateModal}
               onOpenBlogEdit={openBlogEditModal}
               onOpenBlogDelete={openBlogDeleteModal}
+              onOpenBlogView={openBlogViewModal}
               onLogout={handleLogout}
+              modalType={modalType}
+              modalData={modalData}
             />
           )}
         </>
@@ -511,12 +570,57 @@ function App() {
               {modalType === "blog-create" && "Create Blog (Model Fields)"}
               {modalType === "blog-edit" && "Edit Blog (Model Fields)"}
               {modalType === "blog-delete" && "Delete Blog"}
+              {modalType === "blog-view" && "View Blog Details"}
             </h3>
             <p className="form-help">
               This form maps 1:1 to the Java model. On submit the UI calls the
               corresponding REST endpoint. If that endpoint doesn&apos;t exist yet, the
               backend will return 404, which you can use as a teaching moment.
             </p>
+
+            {modalType === "blog-view" ? (
+              <div className="blog-view">
+               <div className="view-row">
+                   <span className="label">Title: </span>
+                   <span className="value">{modalData.title}</span>
+               </div>
+
+                <div className="view-row">
+                    <span className="label">Short Description: </span>
+                    <span className="value">{modalData.description}</span>
+                </div>
+
+                <div className="view-row">
+                    <span className="label">Content: </span>
+                   <span className="value">{modalData.content}</span>
+                </div>
+
+                <div className="view-row">
+                   <span className="label">Status: </span>
+                   <span className="badge">{modalData.status}</span>
+                </div>
+
+                <div className="view-row">
+                   <span className="label">Category: </span>
+                   <span className="value">
+                     {categories.find(c => c.id === modalData.categoryMappings?.[0]?.categoryId)?.name || modalData.categoryMappings?.[0]?.categoryId}
+                   </span>
+                </div>
+
+                 <div className="view-row">
+                      <span className="label">Subcategories: </span>
+                      <span className="value">
+                        {modalData.categoryMappings?.[0]?.subCategoryIds?.map(subId => (
+                            subcategories.find(s => s.id === subId) ?.name
+                        )).filter(Boolean).join(", ") || "No Subcategories"}
+                      </span>
+                 </div>
+
+                <div className="modal-actions">
+                   <button className="btn" onClick={closeModal}>Close</button>
+                </div>
+              </div>
+            ) : (
             <form onSubmit={handleModalSubmit} className="form">
               {(modalType === "category-create" ||
                 modalType === "category-edit" ||
@@ -656,8 +760,7 @@ function App() {
                   </label>
                 </>
               )}
-
-              {(modalType === "blog-create" || modalType === "blog-edit") && (
+              (modalType === "blog-create" || modalType === "blog-edit") && (
                 <>
                   <label>
                     Title
@@ -764,6 +867,7 @@ function App() {
                 </button>
               </div>
             </form>
+            )}
           </div>
         </div>
       )}
@@ -890,7 +994,9 @@ function Dashboard({
   subCategoryForm,
   onSubCategoryChange,
   onCreateSubCategory,
-  onLogout
+  onLogout,
+  modalType,
+  modalData
 }) {
   return (
     <div className="dashboard">
@@ -1048,7 +1154,6 @@ function Dashboard({
         </div>
       </div>
       {/* New Blog Section - Add This */}
-
     </div>
   );
 }
@@ -1302,6 +1407,7 @@ function SaaSDashboard({
   categories,
   subcategories,
   blogCategories,
+  blogs,
   onOpenCategoryCreate,
   onOpenCategoryEdit,
   onOpenCategoryDelete,
@@ -1311,6 +1417,7 @@ function SaaSDashboard({
   onOpenBlogCreate,
   onOpenBlogEdit,
   onOpenBlogDelete,
+  onOpenBlogView,
   onLogout
 }) {
   const [section, setSection] = useState("categories"); // "categories" | "subcategories" | "blogs"
@@ -1330,11 +1437,14 @@ function SaaSDashboard({
         </button>
       );
     }
-    return (
-      <button className="btn primary" onClick={onOpenBlogCreate}>
-        + New Blog
-      </button>
-    );
+    if(section === "blogs"){
+     return (
+       <button className="btn primary" onClick={onOpenBlogCreate}>
+         + New Blog
+       </button>
+       );
+     }
+    return null;
   };
 
   const renderBody = () => {
@@ -1450,6 +1560,37 @@ function SaaSDashboard({
       );
     }
 
+    if(section === "blogs"){
+        return(
+        <table className="data-table">
+            <thead>
+                <tr>
+                  <th className="">ID</th>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {blogs && blogs.length > 0 ? blogs.map((b) => (
+                  <tr key={b.id}>
+                  <td>{b.id}</td>
+                  <td>{b.title}</td>
+                  <td><span className="badge">{b.status}</span></td>
+                  <td className="list-actions">
+                  <button className="btn small" onClick={() => onOpenBlogView(b)}>View</button>
+                  <button className="btn small" onClick={() => onOpenBlogEdit(b)}>Edit</button>
+                  <button className="btn small" onClick={() => onOpenBlogDelete(b)}>Delete</button>
+                  </td>
+                 </tr>
+                 )) : (
+                     <tr><td colSpan="4" className="muted">No blogs found.</td></tr>
+                )}
+            </tbody>
+        </table>
+        );
+    }
+
     // blogs
     return (
       <div>
@@ -1496,13 +1637,13 @@ function SaaSDashboard({
                     <div className="list-actions">
                       <button
                         className="btn small"
-                        onClick={onOpenBlogEdit}
+                        onClick={() => openBlogEdit(blog)}
                       >
                         Edit
                       </button>
                       <button
                         className="btn small"
-                        onClick={onOpenBlogDelete}
+                        onClick={() => openBlogDelete(blog)}
                       >
                         Delete
                       </button>
@@ -1515,7 +1656,8 @@ function SaaSDashboard({
         </table>
       </div>
     );
-  };
+  }
+
 
   return (
     <div className="saas-layout">
@@ -1576,6 +1718,6 @@ function SaaSDashboard({
       </main>
     </div>
   );
-}
+};
 
 export default App;

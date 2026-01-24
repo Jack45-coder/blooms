@@ -4,8 +4,6 @@ import in.codingage.blooms.Database;
 import in.codingage.blooms.dto.BlogRequest;
 import in.codingage.blooms.dto.BlogResponse;
 import in.codingage.blooms.dto.CategoryDetail;
-import in.codingage.blooms.models.Blog;
-import in.codingage.blooms.models.Status;
 import in.codingage.blooms.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +42,9 @@ public class BlogController {
     }
 
     // Get Blog By AuthorId
-    @GetMapping("/{authorId}")
-    public List<BlogResponse> getBlogByAuthorId(@PathVariable String authId){
-        return blogService.getBlogByAuthorId(authId);
+    @GetMapping("/author/{authorId}")
+    public List<BlogResponse> getBlogByAuthorId(@PathVariable String authorId){
+        return blogService.getBlogByAuthorId(authorId);
     }
 
     // Delete Blog By ID

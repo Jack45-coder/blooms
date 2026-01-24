@@ -22,7 +22,7 @@ public class Blog {
     private String description;
     private String content;
     private String status;
-    private boolean isActive;
+    private boolean active;
     private String authorId;
     private LocalDateTime createdDTTM;
 
