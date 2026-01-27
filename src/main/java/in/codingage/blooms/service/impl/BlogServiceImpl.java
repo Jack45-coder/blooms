@@ -16,10 +16,12 @@ import in.codingage.blooms.utlils.RandomIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlogServiceImpl implements BlogService{
@@ -167,5 +169,18 @@ public class BlogServiceImpl implements BlogService{
         blog.setActive(false);
         blogRepository.save(blog);
         return true;
+    }
+
+    // Implementation of UpdateBlog By ID
+    public BlogResponse updateBlog(BlogRequest request, String blogId){
+        Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new RuntimeException("ID not found!"));
+
+        blog.setTitle(request.getTitle());
+        blog.setDescription(request.getDescription());
+        blog.setContent(request.getContent());
+        blog.setCategoryMappings(request.getCategoryMappings());
+
+        Blog updatedBlog = blogRepository.save(blog);
+        return mapToResponse(updatedBlog);
     }
 }

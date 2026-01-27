@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/blogs")
@@ -19,38 +20,44 @@ public class BlogController {
 
 
     @GetMapping("/categories")
-    public List<CategoryDetail> getAllCategoriesWithSubCategories(){
+    public List<CategoryDetail> getAllCategoriesWithSubCategories() {
         return blogService.getAllCategoriesWithSubCategories();
     }
 
     // CREATE BLOG
     @PostMapping
-    public BlogResponse createBlog(@RequestBody BlogRequest request){
+    public BlogResponse createBlog(@RequestBody BlogRequest request) {
         return blogService.createBlog(request, request.getAuthorId());
     }
 
     // Get ALl Blog
     @GetMapping("/all")
-    public List<BlogResponse> getAllBlogs(){
+    public List<BlogResponse> getAllBlogs() {
         return blogService.getAllBlogs();
     }
 
     // Get Blog By ID
     @GetMapping("/{blogId}")
-    public BlogResponse getBlogById(@PathVariable String blogId){
+    public BlogResponse getBlogById(@PathVariable String blogId) {
         return blogService.getBlogById(blogId);
     }
 
     // Get Blog By AuthorId
     @GetMapping("/author/{authorId}")
-    public List<BlogResponse> getBlogByAuthorId(@PathVariable String authorId){
+    public List<BlogResponse> getBlogByAuthorId(@PathVariable String authorId) {
         return blogService.getBlogByAuthorId(authorId);
     }
 
     // Delete Blog By ID
     @DeleteMapping("/{blogId}")
-    public boolean deleteBlogById(@PathVariable String blogId){
+    public boolean deleteBlogById(@PathVariable String blogId) {
         return blogService.deleteBlogById(blogId);
+    }
+
+    // Update Blog By ID
+    @PutMapping("/{blogId}")
+    public BlogResponse updateBlog(@RequestBody BlogRequest request, @PathVariable String blogId){
+        return blogService.updateBlog(request, blogId);
     }
 
 

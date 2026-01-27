@@ -173,7 +173,7 @@ function App() {
   const openBlogEditModal = (blogRow) => {
     setModalType("blog-edit");
     setModalData({
-//       ...initialBlogModel,
+      ...initialBlogModel,
       id: blogRow.id || "",
       title: blogRow.title || "",
       description: blogRow.description || "",
@@ -713,7 +713,12 @@ function App() {
                       name="categoryId"
                       value={modalData.categoryId || ""}
                       onChange={handleModalChange}
-                      required
+                      readOnly = {modalType.includes("-edit") || modalType.includes("-delete")}
+                          style={{
+                                  backgroundColor: modalType.includes("-edit") ? "" : "grey",
+                                  cursor: modalType.includes("-edit") ? "not-allowed" : "text"
+                                }}
+                      required = {!modalType.includes("create")}
                     />
                   </label>
                   <label>
@@ -760,7 +765,7 @@ function App() {
                   </label>
                 </>
               )}
-              (modalType === "blog-create" || modalType === "blog-edit") && (
+              {(modalType === "blog-create" || modalType === "blog-edit") && (
                 <>
                   <label>
                     Title

@@ -4,6 +4,7 @@ import in.codingage.blooms.dto.BlogResponse;
 import in.codingage.blooms.dto.CategoryDetail;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface BlogService {
@@ -18,4 +19,6 @@ public interface BlogService {
     List<BlogResponse> getBlogByAuthorId(String authId);
 
     boolean deleteBlogById(String blogId);
+
+    BlogResponse updateBlog(BlogRequest request, String blogId);
 }
