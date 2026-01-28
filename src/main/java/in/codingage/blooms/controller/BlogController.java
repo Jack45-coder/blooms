@@ -24,7 +24,7 @@ public class BlogController {
         return blogService.getAllCategoriesWithSubCategories();
     }
 
-    // CREATE BLOG
+    //CREATE BLOG
     @PostMapping
     public BlogResponse createBlog(@RequestBody BlogRequest request) {
         return blogService.createBlog(request, request.getAuthorId());
