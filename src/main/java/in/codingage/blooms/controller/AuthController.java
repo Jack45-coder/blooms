@@ -7,6 +7,7 @@ import in.codingage.blooms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+// Aapka React local URL
 @RestController
 @RequestMapping("/api/account")
 public class AuthController {
