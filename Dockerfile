@@ -3,5 +3,4 @@ WORKDIR /app
 COPY . .
 RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
-ENV SPRING_DATA_MONGODB_URI=${MONGODB_URI}
-CMD ["sh", "-c", "java -Dspring.data.mongodb.uri=${MONGODB_URI} -jar target/blooms-0.0.1-SNAPSHOT.jar"]
+CMD java -jar target/*.jar
