@@ -25,4 +25,5 @@ public class AuthController {
     public UserResponse signin(@RequestBody LoginRequest loginRequest){
         return userService.signin(loginRequest);
     }
+
 }
