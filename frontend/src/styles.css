@@ -363,7 +363,7 @@ textarea {
 }
 
 .data-table tr:hover td {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.86);
 }
 
 @media (max-width: 900px) {
