@@ -2,7 +2,7 @@ import axios from "axios";
 
 // All calls use relative /api base; in dev Vite proxies to http://localhost:8080
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://blooms-1.onrender.com/api",
   headers: {
     "Content-Type": "application/json"
   }

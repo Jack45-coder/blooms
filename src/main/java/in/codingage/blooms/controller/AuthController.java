@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 // Aapka React local URL
+@CrossOrigin(origins = "https://blooms-ui.onrender.com")
 @RestController
 @RequestMapping("/api/account")
 public class AuthController {
