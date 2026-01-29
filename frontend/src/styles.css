@@ -436,9 +436,16 @@ code {
   font-weight: 500;
 }
 
-.readOnly{
-  background: #1a1d26;
-  cursor: not-allowed;
+.input-disabled {
+  background-color: rgba(255, 255, 255, 0.1);
   color: #888;
+  cursor: not-allowed;
+  border: 1px solid #444;
+}
+
+.input-active {
+  background-color: #fff;
+  color: #000;
+  cursor: text;
 }
 

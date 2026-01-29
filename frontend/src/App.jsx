@@ -622,257 +622,248 @@ function App() {
               </div>
             ) : (
             <form onSubmit={handleModalSubmit} className="form">
-              {(modalType === "category-create" ||
-                modalType === "category-edit" ||
-                modalType === "category-delete" ||
-                modalType === "subcategory-create" ||
-                modalType === "subcategory-edit" ||
-                modalType === "subcategory-delete" ||
-                modalType === "blog-edit" ||
-                modalType === "blog-delete") && (
-                <label>
-                  ID
-                  <input
-                    name="id"
-                    value={modalData.id || ""}
-                    onChange={handleModalChange}
-                    readOnly={modalType.includes("-edit") || modalType.includes("-delete")}
-                    required={
-                        modalType === "category-edit" ||
-                        modalType === "category-delete" ||
-                        modalType === "subcategory-edit" ||
-                        modalType === "subcategory-delete" ||
-                        modalType === "blog-edit" ||
-                        modalType === "blog-delete"
-                    }
-                  />
-                </label>
-              )
+              {modalType && !modalType.includes("-create") && (
+                  <label>
+                    ID
+                    <input
+                      name="id"
+                      value={modalData.id || ""}
+                      onChange={handleModalChange}
+                      readOnly
+                      className="read-only-input"
+                      required
+                    />
+                  </label>
+                )}
 
-              {(modalType === "category-create" ||
-                modalType === "category-edit") && (
-                <>
-                  <label>
-                    Name *
-                    <input
-                      name="name"
-                      value={modalData.name || ""}
-                      onChange={handleModalChange}
-                      required
-                    />
-                  </label>
-                  <label>
-                    Description
-                    <textarea
-                      name="description"
-                      value={modalData.description || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label>
-                    Image URL
-                    <input
-                      name="imageUrl"
-                      value={modalData.imageUrl || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label className="checkbox-row">
-                    <input
-                      type="checkbox"
-                      name="active"
-                      checked={!!modalData.active}
-                      onChange={handleModalChange}
-                    />
-                    Active
-                  </label>
-                  <label>
-                    Status
-                    <input
-                      name="status"
-                      value={modalData.status || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label>
-                    Created By
-                    <input
-                      name="createdBy"
-                      value={modalData.createdBy || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                </>
-              )}
+                {/* --- 2. Category Fields --- */}
+                {(modalType === "category-create" || modalType === "category-edit") && (
+                  <>
+                    <label>
+                      Name *
+                      <input
+                        name="name"
+                        value={modalData.name || ""}
+                        onChange={handleModalChange}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Description
+                      <textarea
+                        name="description"
+                        value={modalData.description || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label>
+                      Image URL
+                      <input
+                        name="imageUrl"
+                        value={modalData.imageUrl || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label className="checkbox-row">
+                      <input
+                        type="checkbox"
+                        name="active"
+                        checked={!!modalData.active}
+                        onChange={handleModalChange}
+                      />
+                      Active
+                    </label>
+                    <label>
+                      Status
+                      <input
+                        name="status"
+                        value={modalData.status || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label>
+                      Created By
+                      <input
+                        name="createdBy"
+                        value={modalData.createdBy || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                  </>
+                )}
 
-              {(modalType === "subcategory-create" ||
-                modalType === "subcategory-edit") && (
-                <>
-                  <label>
-                    Category ID
-                    <input
-                      name="categoryId"
-                      value={modalData.categoryId || ""}
-                      onChange={handleModalChange}
-                      readOnly = {modalType.includes("-edit") || modalType.includes("-delete")}
-                          style={{
-                                  backgroundColor: modalType.includes("-edit") ? "" : "grey",
-                                  cursor: modalType.includes("-edit") ? "not-allowed" : "text"
-                                }}
-                      required = {!modalType.includes("create")}
-                    />
-                  </label>
-                  <label>
-                    Name
-                    <input
-                      name="name"
-                      value={modalData.name || ""}
-                      onChange={handleModalChange}
-                      required
-                    />
-                  </label>
-                  <label>
-                    Description
-                    <textarea
-                      name="description"
-                      value={modalData.description || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label className="checkbox-row">
-                    <input
-                      type="checkbox"
-                      name="active"
-                      checked={!!modalData.active}
-                      onChange={handleModalChange}
-                    />
-                    Active
-                  </label>
-                  <label>
-                    Status
-                    <input
-                      name="status"
-                      value={modalData.status || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label>
-                    Created By
-                    <input
-                      name="createdBy"
-                      value={modalData.createdBy || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                </>
-              )}
-              {(modalType === "blog-create" || modalType === "blog-edit") && (
-                <>
-                  <label>
-                    Title
-                    <input
-                      name="title"
-                      value={modalData.title || ""}
-                      onChange={handleModalChange}
-                      required
-                    />
-                  </label>
-                  <label>
-                    Short Description
-                    <input
-                      name="description"
-                      value={modalData.description || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label>
-                    Content
-                    <textarea
-                      name="content"
-                      value={modalData.content || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label>
-                    Status
-                    <input
-                      name="status"
-                      value={modalData.status || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label>
-                    Author ID
-                    <input
-                      name="authorId"
-                      value={modalData.authorId || ""}
-                      onChange={handleModalChange}
-                    />
-                  </label>
-                  <label>
+                {/* --- 3. SubCategory Fields --- */}
+                {(modalType === "subcategory-create" || modalType === "subcategory-edit") && (
+                  <>
+                    <label>
+                      Category ID *
+                      <input
+                        name="categoryId"
+                        value={modalData.categoryId || ""}
+                        onChange={handleModalChange}
+                        readOnly={modalType.includes("-edit")}
+                        className={modalType.includes("-edit") ? "input-disabled" : "input-enabled"}
+                        style={{
+                          opacity: modalType.includes("-edit") ? 0.8:1,
+                          cursor: modalType.includes("-edit") ? "not-allowed" : "text"
+                        }}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Name *
+                      <input
+                        name="name"
+                        value={modalData.name || ""}
+                        onChange={handleModalChange}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Description
+                      <textarea
+                        name="description"
+                        value={modalData.description || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label className="checkbox-row">
+                      <input
+                        type="checkbox"
+                        name="active"
+                        checked={!!modalData.active}
+                        onChange={handleModalChange}
+                      />
+                      Active
+                    </label>
+                    <label>
+                      Status
+                      <input
+                        name="status"
+                        value={modalData.status || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label>
+                      Created By
+                      <input
+                        name="createdBy"
+                        value={modalData.createdBy || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                  </>
+                )}
+
+                {/* --- 4. Blog Fields --- */}
+                {(modalType === "blog-create" || modalType === "blog-edit") && (
+                  <>
+                    <label>
+                      Title *
+                      <input
+                        name="title"
+                        value={modalData.title || ""}
+                        onChange={handleModalChange}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Short Description
+                      <input
+                        name="description"
+                        value={modalData.description || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label>
+                      Content
+                      <textarea
+                        name="content"
+                        value={modalData.content || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label>
+                      Status
+                      <input
+                        name="status"
+                        value={modalData.status || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label>
+                      Author ID
+                      <input
+                        name="authorId"
+                        value={modalData.authorId || ""}
+                        onChange={handleModalChange}
+                      />
+                    </label>
+                    <label>
                       Category *
-                      <select onChange={handleBlogCategoryChange}
-                       value={modalData.categoryMappings?.[0]?.categoryId || ""}
-                       required
+                      <select
+                        onChange={handleBlogCategoryChange}
+                        value={modalData.categoryMappings?.[0]?.categoryId || ""}
+                        required
                       >
                         <option value="">Select</option>
                         {categories.map(category => (
-                            <option key={category.id} value={category.id}>
+                          <option key={category.id} value={category.id}>
                             {category.name}
                           </option>
                         ))}
                       </select>
                     </label>
                     {modalData.categoryMappings?.[0]?.categoryId && (
-                          <label>
-                            SubCategory
-                            <select
-                              multiple
-                              value={modalData.categoryMappings?.[0]?.subCategoryIds || []}
-                              onChange={handleBlogSubCategoryChange}
-                            >
-                              <option value="">-- Select --</option>
-                              {subcategories
-                                .filter(sub => sub.categoryId === modalData.categoryMappings[0].categoryId)
-                                .map(sub => (
-                                  <option key={sub.id} value={sub.id}>
-                                    {sub.name}
-                                  </option>
-                                ))
-                              }
-                            </select>
-                          </label>
-                        )}
-                </>
-              )}
+                      <label>
+                        SubCategory
+                        <select
+                          multiple
+                          value={modalData.categoryMappings?.[0]?.subCategoryIds || []}
+                          onChange={handleBlogSubCategoryChange}
+                        >
+                          {subcategories
+                            .filter(sub => sub.categoryId === modalData.categoryMappings[0].categoryId)
+                            .map(sub => (
+                              <option key={sub.id} value={sub.id}>
+                                {sub.name}
+                              </option>
+                            ))
+                          }
+                        </select>
+                      </label>
+                    )}
+                  </>
+                )}
 
-              {(modalType === "category-delete" ||
-                modalType === "subcategory-delete" ||
-                modalType === "blog-delete") && (
-                <p className="form-help">
-                  This will call the corresponding <code>DELETE</code> endpoint
-                  for the given ID.
-                </p>
-              )}
+                {/* --- 5. Delete Confirmation Messages --- */}
+                {(modalType === "category-delete" ||
+                  modalType === "subcategory-delete" ||
+                  modalType === "blog-delete") && (
+                  <p className="form-help danger-text">
+                    Are you sure you want to delete this item? This action will call the <code>DELETE</code> endpoint.
+                  </p>
+                )}
 
-              <div className="modal-actions">
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={closeModal}
-                  disabled={modalSubmitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn primary"
-                  disabled={modalSubmitting}
-                >
-                  {modalSubmitting ? "Submitting..." : "Submit"}
-                </button>
-              </div>
-            </form>
+                {/* --- 6. Form Actions --- */}
+                <div className="modal-actions">
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={closeModal}
+                    disabled={modalSubmitting}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn primary"
+                    disabled={modalSubmitting}
+                  >
+                    {modalSubmitting ? "Submitting..." : "Submit"}
+                  </button>
+                </div>
+              </form>
             )}
           </div>
         </div>
