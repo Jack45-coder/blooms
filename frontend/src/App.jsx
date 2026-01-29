@@ -380,7 +380,7 @@ function App() {
     setCategories([]);
     setBlogCategories([]);
     setMessage("");
-    setError("");lg9FWW
+    setError("");
   };
 
   const handleModalSubmit = async (e) => {
@@ -636,23 +636,24 @@ function App() {
                     name="id"
                     value={modalData.id || ""}
                     onChange={handleModalChange}
+                    readOnly={modalType.includes("-edit") || modalType.includes("-delete")}
                     required={
-                      modalType === "category-edit" ||
-                      modalType === "category-delete" ||
-                      modalType === "subcategory-edit" ||
-                      modalType === "subcategory-delete" ||
-                      modalType === "blog-edit" ||
-                      modalType === "blog-delete"
+                        modalType === "category-edit" ||
+                        modalType === "category-delete" ||
+                        modalType === "subcategory-edit" ||
+                        modalType === "subcategory-delete" ||
+                        modalType === "blog-edit" ||
+                        modalType === "blog-delete"
                     }
                   />
                 </label>
-              )}
+              )
 
               {(modalType === "category-create" ||
                 modalType === "category-edit") && (
                 <>
                   <label>
-                    Name
+                    Name *
                     <input
                       name="name"
                       value={modalData.name || ""}

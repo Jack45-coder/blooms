@@ -436,4 +436,9 @@ code {
   font-weight: 500;
 }
 
+.readOnly{
+  background: #1a1d26;
+  cursor: not-allowed;
+  color: #888;
+}
 
