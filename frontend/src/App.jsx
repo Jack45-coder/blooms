@@ -703,10 +703,6 @@ function App() {
                         onChange={handleModalChange}
                         readOnly={modalType.includes("-edit")}
                         className={modalType.includes("-edit") ? "input-disabled" : "input-enabled"}
-                        style={{
-                          opacity: modalType.includes("-edit") ? 0.8:1,
-                          cursor: modalType.includes("-edit") ? "not-allowed" : "text"
-                        }}
                         required
                       />
                     </label>
