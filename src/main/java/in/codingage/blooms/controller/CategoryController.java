@@ -17,7 +17,6 @@ import java.util.List;
 //        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}
 //)
 
-@CrossOrigin(origins = "https://blooms-ui.onrender.com")
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
