@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 // step1 : put rest controller annotation
 // step2 : put a common category prefix using request mapping.
@@ -17,6 +16,7 @@ import java.util.Optional;
 //        origins = "http://localhost:5173",
 //        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}
 //)
+
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
