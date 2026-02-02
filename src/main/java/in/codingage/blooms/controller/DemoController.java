@@ -15,6 +15,6 @@ public class DemoController {
 
     @GetMapping("/ping")
     public String ping(){
-        return "ok";
+        return "okk";
     }
 }

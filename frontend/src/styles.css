@@ -363,7 +363,7 @@ textarea {
 }
 
 .data-table tr:hover td {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.86);
 }
 
 @media (max-width: 900px) {
@@ -430,15 +430,23 @@ code {
 .view-row .label {
   font-size: 12px;
   color: #888;
+}
 
 .view-row .value {
   font-size: 15px;
   font-weight: 500;
 }
 
-.readOnly{
-  background: #1a1d26;
-  cursor: not-allowed;
+.input-disabled {
+  background-color: rgba(255, 255, 255, 0.1);
   color: #888;
+  cursor: not-allowed;
+  border: 1px solid #444;
+}
+
+.input-active {
+  background-color: #fff;
+  color: #000;
+  cursor: text;
 }
 
