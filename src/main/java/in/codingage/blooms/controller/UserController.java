@@ -40,4 +40,9 @@ public class UserController {
         return userCustomRepository.findUsersWithAgeAbove(age);
     }
 
+    @GetMapping("/api/account/age-role")
+    public List<User> getUsersWithAgeAndRole(@RequestParam Integer age, @RequestParam String role){
+        return userCustomRepository.findUsersWithAgeAboveUsingCB(age, role);
+    }
+
 }

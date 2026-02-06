@@ -8,4 +8,6 @@ public interface UserCustomRepository {
     public User findByEmail(String email);
 
     List<User> findUsersWithAgeAbove(Integer age);
+
+    List<User> findUsersWithAgeAboveUsingCB(Integer age, String role);
 }

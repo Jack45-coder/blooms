@@ -29,4 +29,17 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 
         return mongoTemplate.find(query, User.class);
     }
+
+    public List<User> findUsersWithAgeAboveUsingCB(Integer age, String role){
+        Query query = new Query();
+        if(age != null){
+            query.addCriteria(Criteria.where("age").gt(age));
+        }
+
+        if(role != null){
+            query.addCriteria(Criteria.where("role").is(role));
+        }
+
+        return  mongoTemplate.find(query, User.class);
+    }
 }
