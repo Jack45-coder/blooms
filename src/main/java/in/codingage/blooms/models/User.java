@@ -20,5 +20,6 @@ public class User {
     private String name;
     private String profileUrl;
     private String password;
+    private int age;
     private boolean active;
 }

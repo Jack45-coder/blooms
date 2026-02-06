@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
-    public UserResponse register(@RequestBody UserRequest request){
+    public UserResponse  register(@RequestBody UserRequest request){
         if(request == null){
             throw new IllegalArgumentException("Request null not required!");
         }
@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
             user.setId(RandomIdUtils.generateRandom(8));
             user.setPhone(request.getPhone());
             user.setPassword(request.getPassword());
+            user.setAge(request.getAge());
             user.setActive(true);
             user.setProfileUrl("/images/bloomsUserImg.jpg");
         }

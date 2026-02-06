@@ -4,7 +4,6 @@ import in.codingage.blooms.dto.BlogResponse;
 import in.codingage.blooms.dto.CategoryDetail;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface BlogService {
