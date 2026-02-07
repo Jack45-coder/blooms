@@ -7,7 +7,6 @@ package in.codingage.blooms.controller;
 // spring - very configuration heavy framework
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
