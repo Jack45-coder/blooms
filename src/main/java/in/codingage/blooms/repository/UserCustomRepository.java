@@ -3,9 +3,10 @@ package in.codingage.blooms.repository;
 import in.codingage.blooms.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserCustomRepository {
-    public User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     List<User> findUsersWithAgeAbove(Integer age);
 

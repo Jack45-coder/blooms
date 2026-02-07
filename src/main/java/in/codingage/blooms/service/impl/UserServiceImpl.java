@@ -3,6 +3,7 @@ package in.codingage.blooms.service.impl;
 import in.codingage.blooms.dto.LoginRequest;
 import in.codingage.blooms.dto.UserRequest;
 import in.codingage.blooms.dto.UserResponse;
+import in.codingage.blooms.exception.ApplicationException;
 import in.codingage.blooms.models.Role;
 import in.codingage.blooms.models.User;
 import in.codingage.blooms.repository.UserRepository;
@@ -31,6 +32,10 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Request null not required!");
         }
 
+        userRepository.findByEmail(request.getEmail()).ifPresent(it -> {
+            throw new ApplicationException("Email Already Exists!");
+        });
+
         User user = new User();
 
         if (request.getName() != null && request.getPhone() != null && request.getEmail() != null && request.getPassword() != null){
@@ -44,7 +49,12 @@ public class UserServiceImpl implements UserService {
             user.setActive(true);
             user.setProfileUrl("/images/bloomsUserImg.jpg");
         }
-        userRepository.save(user);
+        try{
+            userRepository.save(user);
+        }catch (Exception e){
+            throw new RuntimeException("Error while saving user");
+        }
+
         return mapToResponse(user);
     }
 
@@ -56,6 +66,10 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByPhoneAndPassword(loginRequest.getPhone(), loginRequest.getPassword()).orElseThrow(() -> new RuntimeException("Invalid credentials"));
         return mapToResponse(user);
+    }
+
+    public User findUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(() -> new ApplicationException("User not found with email: " + email));
     }
 
 

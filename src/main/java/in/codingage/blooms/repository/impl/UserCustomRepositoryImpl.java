@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserCustomRepositoryImpl implements UserCustomRepository {
@@ -16,11 +17,12 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public User findByEmail(String email){
+    public Optional<User> findByEmail(String email){
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(email));
 
-        return mongoTemplate.findOne(query, User.class);
+        User user = mongoTemplate.findOne(query, User.class);
+        return Optional.ofNullable(user);
     }
 
     public List<User> findUsersWithAgeAbove(Integer age){
