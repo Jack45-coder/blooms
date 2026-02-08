@@ -38,10 +38,10 @@ public class UserController {
     @GetMapping("/api/account/admin")
     public ApiResponse<Page<User>> getAllAdmins(@RequestParam int page, @RequestParam int size){
         log.info("Count of all Admins: {}", userRepository.countByRole(Role.ADMIN));
-        log.debug("debug logs");
-        log.warn("warn logs");
-        log.error("error logs");
-        log.trace("trace logs");
+//        log.debug("debug logs");
+//        log.warn("warn logs");
+//        log.error("error logs");
+//        log.trace("trace logs");
 
         Sort sort = Sort.by("age").descending();
 
