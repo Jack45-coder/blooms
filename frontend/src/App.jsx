@@ -287,40 +287,54 @@ function App() {
   };
 
   const fetchCategories = async () => {
-    try {
-      const res = await api.get("/categories/all");
-      setCategories(res.data || []);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load categories.");
-    }
+      try {
+        const res = await api.get("/categories/all");
+        const actualData = res.data.data || res.data || [];
+        setCategories(Array.isArray(actualData) ? actualData : []);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load categories.");
+        setCategories([]);
+      }
   };
 
   const fetchBlogCategories = async () => {
     try {
       const res = await api.get("/blogs/categories");
-      setBlogCategories(res.data || []);
+      console.log("Blog Categories Raw Response:", res.data);
+      const actualData = res.data?.data || res.data;
+
+      if (Array.isArray(actualData)) {
+        setBlogCategories(actualData);
+      } else {
+        console.error("Expected array but got:", typeof actualData);
+        setBlogCategories([]);
+      }
     } catch (err) {
-      // This endpoint is just for demo; ignore errors silently
       console.warn("Could not load blog category details", err);
+      setBlogCategories([]);
     }
   };
 
   const fetchSubCategories = async () => {
-    try{
-    const response =await api.get("/subcategories");
-    setSubcategories(response.data || []);
-    }catch (err){
-     console.error("Failed to fetch subCategories: ", err);
-     }
+      try {
+        const response = await api.get("/subcategories");
+        const actualData = response.data.data || response.data || [];
+        setSubcategories(Array.isArray(actualData) ? actualData : []);
+      } catch (err) {
+        console.error("Failed to fetch subCategories: ", err);
+        setSubcategories([]);
+      }
   };
 
   const fetchBlogs = async () => {
-      try{
-           const res = await api.get("/blogs/all");
-           setBlogs(res.data || []);
-      }catch(err){
-           console.error("Failed to fetch blogs: " , err)
+      try {
+        const res = await api.get("/blogs/all");
+        const actualData = res.data.data || res.data || [];
+        setBlogs(Array.isArray(actualData) ? actualData : []);
+      } catch (err) {
+        console.error("Failed to fetch blogs: ", err);
+        setBlogs([]);
       }
   };
 
@@ -1135,7 +1149,7 @@ function Dashboard({
             Demonstrates a read-only API: <code>GET /api/blogs/categories</code>.
             This shows categories with their subcategories as returned by the backend.
           </p>
-          {blogCategories.length === 0 ? (
+          {!Array.isArray(blogCategories) || blogCategories.length === 0 ? (
             <p className="muted">
               No blog category details returned yet or endpoint not fully
               implemented.
@@ -1158,6 +1172,7 @@ function Dashboard({
             </ul>
           )}
         </div>
+
       </div>
       {/* New Blog Section - Add This */}
     </div>
