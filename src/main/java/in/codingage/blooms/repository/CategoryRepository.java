@@ -14,5 +14,7 @@ public interface CategoryRepository extends MongoRepository<Category, String> {
 
     Optional<Category> findByName(String name);
 
+    Optional<Category> findByNameAndActiveTrue(String name);
+
     Optional<Category> findByIdAndActiveTrue(String id);
 }

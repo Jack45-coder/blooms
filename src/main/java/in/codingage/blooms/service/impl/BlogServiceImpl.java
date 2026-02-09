@@ -4,6 +4,7 @@ import in.codingage.blooms.dto.BlogRequest;
 import in.codingage.blooms.dto.BlogResponse;
 import in.codingage.blooms.dto.CategoryDetail;
 import in.codingage.blooms.dto.SubCategoryDetail;
+import in.codingage.blooms.exception.ApplicationException;
 import in.codingage.blooms.models.Blog;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.Status;
@@ -15,13 +16,10 @@ import in.codingage.blooms.service.BlogService;
 import in.codingage.blooms.utlils.RandomIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BlogServiceImpl implements BlogService{
@@ -76,11 +74,11 @@ public class BlogServiceImpl implements BlogService{
     public BlogResponse createBlog(BlogRequest request, String authorId){
 
         if (request == null || request.getTitle() == null || request.getTitle().isEmpty()){
-            throw new IllegalArgumentException("Blog title is required!");
+            throw new ApplicationException("Blog title is required!");
         }
 
         if (authorId == null || authorId.isEmpty()){
-            throw new IllegalArgumentException("Author ID is required!");
+            throw new ApplicationException("Author ID is required!");
         }
 
         Blog blog = new Blog();
@@ -121,13 +119,13 @@ public class BlogServiceImpl implements BlogService{
     // Implementation Of Find Blog By BlogID:
     public BlogResponse getBlogById(String blogId){
         if (blogId == null || blogId.isEmpty()) {
-            throw new IllegalArgumentException("Blog ID required!");
+            throw new ApplicationException("Blog ID required!");
         }
 
         Blog blog = blogRepository
                 .findById(blogId)
                 .filter(b -> b.isActive())
-                .orElseThrow(() -> new RuntimeException("Blog not found or inactive!"));
+                .orElseThrow(() -> new ApplicationException("Blog not found with id: " + blogId));
 
         BlogResponse response = new BlogResponse();
         response.setTitle(blog.getTitle());
@@ -161,10 +159,10 @@ public class BlogServiceImpl implements BlogService{
     // Implementation Of Delete Blog By blogID:
     public boolean deleteBlogById(String blogId){
         if(blogId == null || blogId.isEmpty()){
-            throw new IllegalArgumentException("Blog ID required!");
+            throw new ApplicationException("Blog ID required!");
         }
 
-        Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new RuntimeException("Blog not found!"));
+        Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new ApplicationException("Blog not found with ID: " +blogId));
 
         blog.setActive(false);
         blogRepository.save(blog);
@@ -173,7 +171,7 @@ public class BlogServiceImpl implements BlogService{
 
     // Implementation of UpdateBlog By ID
     public BlogResponse updateBlog(BlogRequest request, String blogId){
-        Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new RuntimeException("ID not found!"));
+        Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new ApplicationException("ID not found!"));
 
         blog.setTitle(request.getTitle());
         blog.setDescription(request.getDescription());

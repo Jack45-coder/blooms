@@ -2,6 +2,7 @@ package in.codingage.blooms.service.impl;
 
 import in.codingage.blooms.dto.CategoryRequest;
 import in.codingage.blooms.dto.CategoryResponse;
+import in.codingage.blooms.exception.ApplicationException;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.Role;
 import in.codingage.blooms.models.Status;
@@ -35,16 +36,16 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse createCategory(CategoryRequest request){
 
         if (request == null){
-            throw new IllegalArgumentException("Request cannot be null");
+            throw new ApplicationException("Request cannot be null");
         }
 
         if (request.getName() == null || request.getDescription() == null){
-            throw new IllegalArgumentException("Category name & description required");
+            throw new ApplicationException("Category name & description required");
         }
 
         categoryRepository.findByName(request.getName())
                 .ifPresent(c -> {
-                    throw new RuntimeException("Category already exist!");
+                    throw new ApplicationException("Category already exist!");
                 });
 
         Category category = new Category();
@@ -58,6 +59,26 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCreatedDTTM(LocalDateTime.now());
 
         categoryRepository.save(category);
+        return mapToResponse(category);
+    }
+
+    // Implementation of get Category By ID
+    public CategoryResponse getCategoryById(String id){
+        if(id == null || id.isEmpty()){
+            throw new ApplicationException("Category Id required!");
+        }
+        Category category = categoryRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ApplicationException("Category not found with ID: " +id));
+        return mapToResponse(category);
+    }
+
+    // Implementation of get Category By Name
+    public CategoryResponse getCategoryByName(String name){
+        if(name == null || name.isEmpty()){
+            throw new ApplicationException("Category name required!");
+        }
+        Category category = categoryRepository.findByNameAndActiveTrue(name)
+                .orElseThrow(() -> new ApplicationException("Category not found with name: "+name));
         return mapToResponse(category);
     }
 
@@ -89,7 +110,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         Category category = categoryRepository.findByIdAndActiveTrue(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found!"));
+                .orElseThrow(() -> new ApplicationException("Category not found with ID: " +categoryId));
 
         category.setActive(false);
         categoryRepository.save(category);

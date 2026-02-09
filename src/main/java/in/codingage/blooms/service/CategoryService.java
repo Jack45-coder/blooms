@@ -15,4 +15,8 @@ public interface CategoryService {
     Optional<CategoryResponse> updateCategory(CategoryRequest request, String id);
 
     boolean deleteCategory(String categoryId);
+
+    CategoryResponse getCategoryById(String id);
+
+    CategoryResponse getCategoryByName(String name);
 }

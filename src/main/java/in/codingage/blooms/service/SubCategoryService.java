@@ -13,4 +13,8 @@ public interface SubCategoryService {
     boolean delete(String subCategoryId);
 
     SubCategoryResponse updateSubcategory(SubCategoryRequest request, String id);
+
+    SubCategoryResponse getSubCatById(String id);
+
+    SubCategoryResponse getSubCatByName(String name);
 }

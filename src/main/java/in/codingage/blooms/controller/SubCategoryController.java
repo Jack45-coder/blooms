@@ -1,16 +1,12 @@
 package in.codingage.blooms.controller;
 
-import in.codingage.blooms.Database;
 import in.codingage.blooms.dto.SubCategoryRequest;
 import in.codingage.blooms.dto.SubCategoryResponse;
-import in.codingage.blooms.models.Category;
-import in.codingage.blooms.models.Status;
-import in.codingage.blooms.models.SubCategory;
+import in.codingage.blooms.response.ApiResponse;
 import in.codingage.blooms.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,23 +19,37 @@ public class SubCategoryController {
 
     // create SubCategory
     @PostMapping
-    public SubCategoryResponse createSubcategory(@RequestBody SubCategoryRequest subCategoryRequest){
-        return subCategoryService.createSubCategory(subCategoryRequest);
+    public ApiResponse<SubCategoryResponse> createSubcategory(@RequestBody SubCategoryRequest subCategoryRequest){
+        return new ApiResponse<>(true, "Created Subcategories Successfully", subCategoryService.createSubCategory(subCategoryRequest));
+    }
+
+    // Get SubCategory By ID
+    @GetMapping("/id/{id}")
+    public ApiResponse<SubCategoryResponse> getSubCatById(@PathVariable String id){
+        return new ApiResponse<>(true, null, subCategoryService.getSubCatById(id));
+    }
+
+    // Get SubCategory By Name
+    @GetMapping("/name/{name}")
+    public ApiResponse<SubCategoryResponse> getSubCatByName(String name){
+        return new ApiResponse<>(true, null, subCategoryService.getSubCatByName(name));
     }
 
     @GetMapping
-    public List<SubCategoryResponse> getSubCategories(){
-        return subCategoryService.getAll();
+    public ApiResponse<List<SubCategoryResponse>> getSubCategories(){
+        return new ApiResponse<>(true, null, subCategoryService.getAll());
     }
 
     @DeleteMapping("/{subCategoryId}")
-    public boolean deleteSubCategory(@PathVariable String subCategoryId){
-        return subCategoryService.delete(subCategoryId);
+    public ApiResponse<String> deleteSubCategory(@PathVariable String subCategoryId){
+        subCategoryService.delete(subCategoryId);
+        return new ApiResponse<>(true, "Deleted Subcategory Successfully", null);
     }
 
     @PutMapping("/{id}")
-    public SubCategoryResponse updateSubcategory(@PathVariable SubCategoryRequest request, String id){
-        return subCategoryService.updateSubcategory(request, id);
+    public ApiResponse<SubCategoryResponse> updateSubcategory(@RequestBody SubCategoryRequest request, @PathVariable String id){
+        SubCategoryResponse response = subCategoryService.updateSubcategory(request, id);
+        return new ApiResponse<>(true, "Updated Subcategory Successfully", response);
     }
 
 //    // read SubCategory

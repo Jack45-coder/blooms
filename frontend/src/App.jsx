@@ -254,23 +254,32 @@ function App() {
 
   // Login using phone + password – backend can implement /api/account/login
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setMessage("");
-    setError("");
-    try {
-      const res = await api.post("/account/login", loginForm);
-      if (!res.data) {
-        setError("No user found with that mobile/password.");
-        return;
+      e.preventDefault();
+      setMessage("");
+      setError("");
+      try {
+          const res = await api.post("/account/login", loginForm);
+          const responseData = res.data;
+
+          if (responseData && responseData.success === false) {
+              setError(responseData.errorMessage || "Invalid Phone or Password");
+          }
+
+          else if (responseData && responseData.id) {
+              setCurrentUser(responseData);
+              setMessage("Login Successful!");
+              setError("");
+          }
+          else {
+              setError("Unexpected response from server.");
+          }
+      } catch (error) {
+          if (error.response && error.response.data) {
+              setError(error.response.data.errorMessage || "Login Failed");
+          } else {
+              setError("Network error. Please try again later.");
+          }
       }
-      setCurrentUser(res.data);
-      setMessage(`Logged in as ${res.data.name || res.data.email || "user"}`);
-    } catch (err) {
-      console.error(err);
-      setError(
-        "Login failed. (If /api/account/login is not implemented yet, this is expected.)"
-      );
-    }
   };
 
   const fetchCategories = async () => {

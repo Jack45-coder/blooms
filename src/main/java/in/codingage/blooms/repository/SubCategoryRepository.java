@@ -15,4 +15,6 @@ public interface SubCategoryRepository extends MongoRepository<SubCategory, Stri
     List<SubCategory> findAllByActiveTrue();
 
     Optional<SubCategory> findByIdAndActiveTrue(String subCategoryId);
+
+    Optional<SubCategory> findByNameAndActiveTrue(String name);
 }

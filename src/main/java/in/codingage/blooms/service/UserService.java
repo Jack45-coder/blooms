@@ -12,4 +12,6 @@ public interface UserService {
     UserResponse signin(LoginRequest loginRequest);
 
     User findUserByEmail(String email);
+
+    User deleteById(String id);
 }

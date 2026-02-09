@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     public UserResponse  register(@RequestBody UserRequest request){
         if(request == null){
-            throw new IllegalArgumentException("Request null not required!");
+            throw new ApplicationException("Request null not required!");
         }
 
         userRepository.findByEmail(request.getEmail()).ifPresent(it -> {
@@ -61,17 +61,30 @@ public class UserServiceImpl implements UserService {
     public UserResponse signin(LoginRequest loginRequest){
         if (loginRequest.getPhone() == null || loginRequest.getPhone().isEmpty() ||
                 loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Phone & Password required");
+            throw new ApplicationException("Phone & Password required");
         }
 
-        User user = userRepository.findByPhoneAndPassword(loginRequest.getPhone(), loginRequest.getPassword()).orElseThrow(() -> new RuntimeException("Invalid credentials"));
+        User user = userRepository.findByPhone(loginRequest.getPhone())
+                .orElseThrow(() -> new ApplicationException("Invalid Phone No!"));
+
+        if(!user.getPassword().equals(loginRequest.getPassword())){
+            throw new ApplicationException("Invalid Password!");
+        }
         return mapToResponse(user);
     }
 
     public User findUserByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(() -> new ApplicationException("User not found with email: " + email));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ApplicationException("User not found with email: " + email));
     }
 
-
+    public User deleteById(String id){
+        User user = userRepository.findById(id).orElseThrow(() -> new ApplicationException("User not Found!"));
+        if (user.isActive()){
+            user.setActive(false);
+            userRepository.save(user);
+        }
+        return user;
+    }
 }
 

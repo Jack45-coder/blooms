@@ -4,6 +4,8 @@ import in.codingage.blooms.Database;
 import in.codingage.blooms.dto.BlogRequest;
 import in.codingage.blooms.dto.BlogResponse;
 import in.codingage.blooms.dto.CategoryDetail;
+import in.codingage.blooms.exception.ApplicationException;
+import in.codingage.blooms.response.ApiResponse;
 import in.codingage.blooms.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,44 +22,49 @@ public class BlogController {
 
 
     @GetMapping("/categories")
-    public List<CategoryDetail> getAllCategoriesWithSubCategories() {
-        return blogService.getAllCategoriesWithSubCategories();
+    public ApiResponse<List<CategoryDetail>> getAllCategoriesWithSubCategories() {
+        return new ApiResponse<>(true, null, blogService.getAllCategoriesWithSubCategories());
     }
 
     //CREATE BLOG
     @PostMapping
-    public BlogResponse createBlog(@RequestBody BlogRequest request) {
-        return blogService.createBlog(request, request.getAuthorId());
+    public ApiResponse<BlogResponse> createBlog(@RequestBody BlogRequest request) {
+        return new ApiResponse<>(true, "Blog Created Successfully", blogService.createBlog(request, request.getAuthorId()));
     }
 
     // Get ALl Blog
     @GetMapping("/all")
-    public List<BlogResponse> getAllBlogs() {
-        return blogService.getAllBlogs();
+    public ApiResponse<List<BlogResponse>> getAllBlogs() {
+        return new ApiResponse<>(true, null, blogService.getAllBlogs());
     }
 
     // Get Blog By ID
     @GetMapping("/{blogId}")
-    public BlogResponse getBlogById(@PathVariable String blogId) {
-        return blogService.getBlogById(blogId);
+    public ApiResponse<BlogResponse> getBlogById(@PathVariable String blogId) {
+        return new ApiResponse<>(true, null, blogService.getBlogById(blogId));
     }
 
     // Get Blog By AuthorId
     @GetMapping("/author/{authorId}")
-    public List<BlogResponse> getBlogByAuthorId(@PathVariable String authorId) {
-        return blogService.getBlogByAuthorId(authorId);
+    public ApiResponse<List<BlogResponse>> getBlogByAuthorId(@PathVariable String authorId) {
+        return new ApiResponse<>(true, null, blogService.getBlogByAuthorId(authorId));
     }
 
     // Delete Blog By ID
     @DeleteMapping("/{blogId}")
-    public boolean deleteBlogById(@PathVariable String blogId) {
-        return blogService.deleteBlogById(blogId);
+    public ApiResponse<Boolean> deleteBlogById(@PathVariable String blogId) {
+        boolean deleted =  blogService.deleteBlogById(blogId);
+        if (!deleted){
+            throw new ApplicationException("Blog Not Found with id: " + blogId);
+        }
+        return new ApiResponse<>(true, "Blog Deleted Successfully",null);
     }
 
     // Update Blog By ID
     @PutMapping("/{blogId}")
-    public BlogResponse updateBlog(@RequestBody BlogRequest request, @PathVariable String blogId){
-        return blogService.updateBlog(request, blogId);
+    public ApiResponse<BlogResponse> updateBlog(@RequestBody BlogRequest request, @PathVariable String blogId){
+        BlogResponse response = blogService.updateBlog(request, blogId);
+        return new ApiResponse<>(true, "Blog Updated Successfully", response);
     }
 
 

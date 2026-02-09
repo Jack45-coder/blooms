@@ -88,4 +88,9 @@ public class UserController {
         return userRepository.findAll(pageRequest).getContent();
     }
 
+    @DeleteMapping("/api/account/{id}")
+    public ApiResponse<User> deleteById(@PathVariable String id){
+        return new ApiResponse<>(true, "User Deleted Successfully", userService.deleteById(id));
+    }
+
 }
