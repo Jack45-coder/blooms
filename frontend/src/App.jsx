@@ -259,21 +259,25 @@ function App() {
       setError("");
       try {
           const res = await api.post("/account/login", loginForm);
-          const responseData = res.data;
+          const responseData = res.data; // Yeh aapka ApiResponse object hai
 
-          if (responseData && responseData.success === false) {
-              setError(responseData.errorMessage || "Invalid Phone or Password");
-          }
-
-          else if (responseData && responseData.id) {
-              setCurrentUser(responseData);
+          // 1. Pehle success flag check karein (Backend se true/false aata hai)
+          if (responseData && responseData.success === true) {
+              // Agar success true hai, toh user ka data 'data' field mein hoga
+              setCurrentUser(responseData.data);
               setMessage("Login Successful!");
               setError("");
           }
+          // 2. Agar success false hai (Galat details)
+          else if (responseData && responseData.success === false) {
+              setError(responseData.errorMessage || "Invalid Phone or Password");
+          }
+          // 3. Agar response ka format hi unexpected ho
           else {
               setError("Unexpected response from server.");
           }
       } catch (error) {
+          // Network or Server Errors (404, 500, etc.)
           if (error.response && error.response.data) {
               setError(error.response.data.errorMessage || "Login Failed");
           } else {
