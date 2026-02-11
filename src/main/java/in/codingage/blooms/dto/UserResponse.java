@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 package in.codingage.blooms.dto;
 
 public class UserResponse {
@@ -47,4 +48,19 @@ public class UserResponse {
                 ", profileUrl='" + profileUrl + '\'' +
                 '}';
     }
+=======
+package in.codingage.blooms.dto;
+
+import in.codingage.blooms.models.Role;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class UserResponse {
+    private String id;
+    private String name;
+    private String email;
+    private Role role;
+>>>>>>> Stashed changes
 }
