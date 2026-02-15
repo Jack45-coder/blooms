@@ -17,4 +17,6 @@ public interface SubCategoryService {
     SubCategoryResponse getSubCatById(String id);
 
     SubCategoryResponse getSubCatByName(String name);
+
+    List<SubCategoryResponse> getSubCategoriesByCategoryId(String categoryId);
 }

@@ -29,6 +29,12 @@ public class SubCategoryController {
         return new ApiResponse<>(true, null, subCategoryService.getSubCatById(id));
     }
 
+    @GetMapping("/category/{categoryId}")
+    public ApiResponse<List<SubCategoryResponse>> getSubCategoriesByCategoryId(@PathVariable String categoryId){
+        List<SubCategoryResponse> responses = subCategoryService.getSubCategoriesByCategoryId(categoryId);
+        return new ApiResponse<>(true, null, responses);
+    }
+
     // Get SubCategory By Name
     @GetMapping("/name/{name}")
     public ApiResponse<SubCategoryResponse> getSubCatByName(String name){

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService {
@@ -114,6 +115,17 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         SubCategory subCategory = subCategoryRepository.findByNameAndActiveTrue(name)
                 .orElseThrow(() -> new ApplicationException("SubCategory not found with name: " + name));
         return mapToResponse(subCategory);
+    }
+
+    public List<SubCategoryResponse> getSubCategoriesByCategoryId(String categoryId){
+        if (categoryId == null || categoryId.isEmpty()){
+            throw new ApplicationException("Request null is not required!");
+        }
+        List<SubCategory> subCategories = subCategoryRepository.findAllByCategoryIdAndActiveTrue(categoryId);
+
+        return subCategories.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
 

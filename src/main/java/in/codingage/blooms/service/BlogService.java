@@ -17,7 +17,7 @@ public interface BlogService {
 
     List<BlogResponse> getBlogByAuthorId(String authId);
 
-    boolean deleteBlogById(String blogId);
+    boolean deleteBlogById(String blogId, String loggedInUserId);
 
-    BlogResponse updateBlog(BlogRequest request, String blogId);
+    BlogResponse updateBlog(BlogRequest request, String blogId, String loggedInUserID);
 }

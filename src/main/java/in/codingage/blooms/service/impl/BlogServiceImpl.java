@@ -157,21 +157,29 @@ public class BlogServiceImpl implements BlogService{
     }
 
     // Implementation Of Delete Blog By blogID:
-    public boolean deleteBlogById(String blogId){
+    public boolean deleteBlogById(String blogId, String loggedInUserId){
         if(blogId == null || blogId.isEmpty()){
             throw new ApplicationException("Blog ID required!");
         }
 
         Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new ApplicationException("Blog not found with ID: " +blogId));
 
+        // 🔐 OWNER VALIDATION LOGIC
+        if(!blog.getAuthorId().equals(loggedInUserId)){
+            throw new ApplicationException("You are not allowed to delete this blog");
+        }
         blog.setActive(false);
         blogRepository.save(blog);
         return true;
     }
 
     // Implementation of UpdateBlog By ID
-    public BlogResponse updateBlog(BlogRequest request, String blogId){
+    public BlogResponse updateBlog(BlogRequest request, String blogId, String loggedInUserId){
         Blog blog = blogRepository.findByIdAndActiveTrue(blogId).orElseThrow(() -> new ApplicationException("ID not found!"));
+
+        if (!blog.getAuthorId().equals(loggedInUserId)) {
+            throw new ApplicationException("You are not allowed to edit this blog");
+        }
 
         blog.setTitle(request.getTitle());
         blog.setDescription(request.getDescription());

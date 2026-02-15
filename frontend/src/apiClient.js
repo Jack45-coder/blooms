@@ -21,4 +21,3 @@ export function postForm(url, data) {
   });
 
 }
-

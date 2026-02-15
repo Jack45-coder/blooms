@@ -1,6 +1,5 @@
 package in.codingage.blooms.controller;
 
-import in.codingage.blooms.Database;
 import in.codingage.blooms.dto.BlogRequest;
 import in.codingage.blooms.dto.BlogResponse;
 import in.codingage.blooms.dto.CategoryDetail;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/blogs")
@@ -52,8 +50,8 @@ public class BlogController {
 
     // Delete Blog By ID
     @DeleteMapping("/{blogId}")
-    public ApiResponse<Boolean> deleteBlogById(@PathVariable String blogId) {
-        boolean deleted =  blogService.deleteBlogById(blogId);
+    public ApiResponse<Boolean> deleteBlogById(@PathVariable String blogId, @RequestHeader("userId") String userId) {
+        boolean deleted =  blogService.deleteBlogById(blogId, userId);
         if (!deleted){
             throw new ApplicationException("Blog Not Found with id: " + blogId);
         }
@@ -62,8 +60,8 @@ public class BlogController {
 
     // Update Blog By ID
     @PutMapping("/{blogId}")
-    public ApiResponse<BlogResponse> updateBlog(@RequestBody BlogRequest request, @PathVariable String blogId){
-        BlogResponse response = blogService.updateBlog(request, blogId);
+    public ApiResponse<BlogResponse> updateBlog(@RequestBody BlogRequest request, @PathVariable String blogId, @RequestHeader("userId") String userId){
+        BlogResponse response = blogService.updateBlog(request, blogId, userId);
         return new ApiResponse<>(true, "Blog Updated Successfully", response);
     }
 
