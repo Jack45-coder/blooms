@@ -22,6 +22,7 @@ public class SubCategory {
     private String categoryId;
     private String name;
     private String description;
+    private String imageUrl;
     private boolean active;
     private String status;
     private String createdBy;

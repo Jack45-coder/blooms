@@ -10,6 +10,7 @@ public class CategoryResponse {
     private String name;
     private String description;
     private String imageUrl;
+    private String createdBy;
 
     public CategoryResponse() {
 

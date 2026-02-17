@@ -41,7 +41,7 @@ public class SubCategoryController {
         return new ApiResponse<>(true, null, subCategoryService.getSubCatByName(name));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ApiResponse<List<SubCategoryResponse>> getSubCategories(){
         return new ApiResponse<>(true, null, subCategoryService.getAll());
     }

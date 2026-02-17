@@ -12,5 +12,7 @@ public class SubCategoryResponse {
     private String categoryId;
     private String name;
     private String desc;
+    private String imageUrl;
+    private String createdBy;
 
 }

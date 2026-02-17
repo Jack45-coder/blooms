@@ -29,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
         response.setName(category.getName());
         response.setDescription(category.getDescription());
         response.setImageUrl(category.getImageUrl());
+        response.setCreatedBy(category.getCreatedBy());
         return response;
     }
 
@@ -54,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setDescription(request.getDescription());
         category.setImageUrl(request.getImageUrl());
         category.setStatus(Status.INREVIEW.getDisplayName());
-        category.setCreatedBy(Role.USER.name());
+        category.setCreatedBy(request.getCreatedBy());
         category.setActive(true);
         category.setCreatedDTTM(LocalDateTime.now());
 

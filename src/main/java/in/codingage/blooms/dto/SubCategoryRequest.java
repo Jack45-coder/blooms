@@ -9,4 +9,6 @@ public class SubCategoryRequest {
     private String categoryId;
     private String name;
     private String description;
+    private String imageUrl;
+    private String createdBy;
 }

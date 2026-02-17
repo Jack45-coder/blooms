@@ -318,7 +318,7 @@ function App() {
 
   const fetchSubCategories = async () => {
       try {
-        const response = await api.get("/subcategories");
+        const response = await api.get("/subcategories/all");
         const actualData = response.data.data || response.data || [];
         setSubcategories(Array.isArray(actualData) ? actualData : []);
       } catch (err) {

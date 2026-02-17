@@ -34,7 +34,9 @@ public class SubCategoryServiceImpl implements SubCategoryService {
                 .id(subCategory.getId())
                 .name(subCategory.getName())
                 .desc(subCategory.getDescription())
+                .imageUrl(subCategory.getImageUrl())
                 .categoryId(subCategory.getCategoryId())
+                .createdBy(subCategory.getCreatedBy())
                 .build();
     }
 
@@ -54,7 +56,8 @@ public class SubCategoryServiceImpl implements SubCategoryService {
             subCategory.setCategoryId(subCategoryRequest.getCategoryId());
             subCategory.setId(RandomIdUtils.generateRandom(6));
             subCategory.setCreatedDTTM(LocalDateTime.now());
-            subCategory.setCreatedBy("ADMIN");
+            subCategory.setCreatedBy(subCategoryRequest.getCreatedBy());
+            subCategory.setImageUrl(subCategoryRequest.getImageUrl());
             subCategory.setStatus(Status.PUBLISHED.getDisplayName());
             subCategory.setActive(true);
 
