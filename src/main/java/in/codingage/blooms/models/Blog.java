@@ -21,6 +21,7 @@ public class Blog {
     private String title;
     private String description;
     private String content;
+    private String imageUrl;
     private String status;
     private boolean active;
     private String authorId;

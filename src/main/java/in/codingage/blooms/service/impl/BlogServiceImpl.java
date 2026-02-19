@@ -40,6 +40,7 @@ public class BlogServiceImpl implements BlogService{
         response.setTitle(blog.getTitle());
         response.setDescription(blog.getDescription());
         response.setContent(blog.getContent());
+        response.setImageUrl(blog.getImageUrl());
         response.setStatus(blog.getStatus());
         response.setAuthorId(blog.getAuthorId());
         response.setCreatedDTTM(blog.getCreatedDTTM());
@@ -87,6 +88,7 @@ public class BlogServiceImpl implements BlogService{
         blog.setTitle(request.getTitle());
         blog.setDescription(request.getDescription());
         blog.setContent(request.getContent());
+        blog.setImageUrl(request.getImageUrl());
         blog.setActive(true);
         blog.setStatus(Status.PUBLISHED.toString());
         blog.setCreatedDTTM(LocalDateTime.now());
@@ -107,6 +109,7 @@ public class BlogServiceImpl implements BlogService{
             response.setTitle(blog.getTitle());
             response.setDescription(blog.getDescription());
             response.setContent(blog.getContent());
+            response.setImageUrl(blog.getImageUrl());
             response.setAuthorId(blog.getAuthorId());
             response.setCreatedDTTM(blog.getCreatedDTTM());
             response.setCategoryMappings(blog.getCategoryMappings());
@@ -131,6 +134,7 @@ public class BlogServiceImpl implements BlogService{
         response.setTitle(blog.getTitle());
         response.setDescription(blog.getDescription());
         response.setContent(blog.getContent());
+        response.setImageUrl(blog.getImageUrl());
         response.setAuthorId(blog.getAuthorId());
         response.setStatus(blog.getStatus());
         response.setCategoryMappings(blog.getCategoryMappings());
@@ -145,11 +149,13 @@ public class BlogServiceImpl implements BlogService{
 
         return blogs.stream().map(blog ->{
             BlogResponse response = new BlogResponse();
+            response.setId(blog.getId());
             response.setTitle(blog.getTitle());
             response.setDescription(blog.getDescription());
             response.setContent(blog.getContent());
+            response.setImageUrl(blog.getImageUrl());
             response.setAuthorId(blog.getAuthorId());
-            response.setStatus(Status.PUBLISHED.getDisplayName());
+            response.setStatus(blog.getStatus());
             response.setCategoryMappings(blog.getCategoryMappings());
             response.setCreatedDTTM(blog.getCreatedDTTM());
             return response;
@@ -183,6 +189,7 @@ public class BlogServiceImpl implements BlogService{
 
         blog.setTitle(request.getTitle());
         blog.setDescription(request.getDescription());
+        blog.setImageUrl(request.getImageUrl());
         blog.setContent(request.getContent());
         blog.setCategoryMappings(request.getCategoryMappings());
 

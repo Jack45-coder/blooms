@@ -14,6 +14,7 @@ public class BlogResponse {
     private String title;
     private String description;
     private String content;
+    private String imageUrl;
     private String status;
     private String authorId;
     private List<CategoryMapping> categoryMappings;
