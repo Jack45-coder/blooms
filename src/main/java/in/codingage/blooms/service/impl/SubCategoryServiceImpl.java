@@ -33,7 +33,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         return SubCategoryResponse.builder()
                 .id(subCategory.getId())
                 .name(subCategory.getName())
-                .desc(subCategory.getDescription())
+                .description(subCategory.getDescription())
                 .imageUrl(subCategory.getImageUrl())
                 .categoryId(subCategory.getCategoryId())
                 .createdBy(subCategory.getCreatedBy())
