@@ -22,6 +22,7 @@ public class Category {
     private boolean active;
     private LocalDateTime createdDTTM;
     private String createdBy;
+    private String updatedBy;
     private String status;
 
 }

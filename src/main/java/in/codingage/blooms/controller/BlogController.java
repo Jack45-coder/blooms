@@ -7,10 +7,12 @@ import in.codingage.blooms.exception.ApplicationException;
 import in.codingage.blooms.response.ApiResponse;
 import in.codingage.blooms.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:5173", "https://blooms-ui.onrender.com"})
 @RestController
 @RequestMapping("/api/blogs")
 public class BlogController {
@@ -20,6 +22,7 @@ public class BlogController {
 
 
     @GetMapping("/categories")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<List<CategoryDetail>> getAllCategoriesWithSubCategories() {
         return new ApiResponse<>(true, null, blogService.getAllCategoriesWithSubCategories());
     }

@@ -1,0 +1,2 @@
+-- add spring security dependency to pom.xml
+ --> activates default security

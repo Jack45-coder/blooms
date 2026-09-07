@@ -1,16 +1,14 @@
 package in.codingage.blooms.dto;
 
-import in.codingage.blooms.models.Role;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
-public class UserResponse {
-    private String id;
+public class RegisterRequest {
     private String userName;
     private String email;
-    private Set<Role> role;
+    private String phone;
+    private String password;
+    private int age; 
 }

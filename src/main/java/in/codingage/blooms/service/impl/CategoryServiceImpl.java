@@ -6,10 +6,15 @@ import in.codingage.blooms.exception.ApplicationException;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.Role;
 import in.codingage.blooms.models.Status;
+import in.codingage.blooms.models.User;
 import in.codingage.blooms.repository.CategoryRepository;
+import in.codingage.blooms.repository.UserRepository;
 import in.codingage.blooms.service.CategoryService;
 import in.codingage.blooms.utlils.RandomIdUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +27,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     // map to response
     private CategoryResponse mapToResponse(Category category){
         CategoryResponse response = new CategoryResponse();
@@ -30,11 +38,12 @@ public class CategoryServiceImpl implements CategoryService {
         response.setDescription(category.getDescription());
         response.setImageUrl(category.getImageUrl());
         response.setCreatedBy(category.getCreatedBy());
+        response.setStatus(category.getStatus().toString());
         return response;
     }
 
     // Implementation Of Create Category
-    public CategoryResponse createCategory(CategoryRequest request){
+    public CategoryResponse createCategory(HttpServletRequest httpServletRequest, CategoryRequest request){
 
         if (request == null){
             throw new ApplicationException("Request cannot be null");
@@ -49,13 +58,28 @@ public class CategoryServiceImpl implements CategoryService {
                     throw new ApplicationException("Category already exist!");
                 });
 
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new ApplicationException("User not found"));
+
         Category category = new Category();
         category.setId(RandomIdUtils.generateRandom(6));
         category.setName(request.getName());
         category.setDescription(request.getDescription());
         category.setImageUrl(request.getImageUrl());
-        category.setStatus(Status.INREVIEW.getDisplayName());
-        category.setCreatedBy(request.getCreatedBy());
+
+        // ROLE check
+        if(user.getRole().contains(Role.ROLE_ADMIN)){
+            category.setStatus(Status.PUBLISHED.getDisplayName());
+        }else {
+            category.setStatus(Status.INREVIEW.getDisplayName());
+        }
+
+        category.setCreatedBy(httpServletRequest.getRemoteUser());
         category.setActive(true);
         category.setCreatedDTTM(LocalDateTime.now());
 
@@ -90,6 +114,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryList.stream().map(this::mapToResponse).toList();
     }
 
+    // Implementation of get all Categories InReview
+    public List<CategoryResponse> getInReviewCategories(){
+        List<Category> categoryList = categoryRepository.findAllByStatus(Status.INREVIEW.getDisplayName());
+        return categoryList.stream().map(this::mapToResponse).toList();
+    }
+
     // Implementation Of Update category:
     public Optional<CategoryResponse> updateCategory(CategoryRequest request ,String id){
         if(request == null || id == null || id.isEmpty()){
@@ -118,6 +148,23 @@ public class CategoryServiceImpl implements CategoryService {
         return true;
     }
 
+    // update status by admin
+    public CategoryResponse updateCategoryStatus(HttpServletRequest httpServletRequest, String categoryId, Status status){
+        if (categoryId == null || categoryId.isEmpty()){
+            throw new ApplicationException("Category ID required!");
+        }
+
+        Category category = categoryRepository
+                .findByIdAndActiveTrue(categoryId)
+                .orElseThrow(() -> new ApplicationException("Category not found with ID: "+categoryId));
+
+        category.setStatus(status.getDisplayName());
+        category.setUpdatedBy(httpServletRequest.getRemoteUser());
+
+        Category updatedCategory = categoryRepository.save(category);
+
+        return mapToResponse(updatedCategory);
+    }
 
 
 }

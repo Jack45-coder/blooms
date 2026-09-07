@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:5173", "https://blooms-ui.onrender.com"})
 @RestController
 @Slf4j
 public class UserController {
@@ -31,13 +32,13 @@ public class UserController {
 
     @GetMapping("/api/account")
     public User getUserByName(@RequestParam String name){
-        return userRepository.findFirstByName(name).orElseThrow(() -> new ApplicationException("User Not Found!"));
+        return userRepository.findFirstByUserName(name).orElseThrow(() -> new ApplicationException("User Not Found!"));
 
     }
 
     @GetMapping("/api/account/admin")
     public ApiResponse<Page<User>> getAllAdmins(@RequestParam int page, @RequestParam int size){
-        log.info("Count of all Admins: {}", userRepository.countByRole(Role.ADMIN));
+        log.info("Count of all Admins: {}", userRepository.countByRole(Role.ROLE_ADMIN));
 //        log.debug("debug logs");
 //        log.warn("warn logs");
 //        log.error("error logs");
@@ -81,16 +82,13 @@ public class UserController {
         return userCustomRepository.findUsersWithAgeAboveUsingCB(age, role);
     }
 
-    @GetMapping("/api/account/all")
-    public List<User> getAllUsers(@RequestParam int page, @RequestParam int size){
-        Sort sort = Sort.by("name").ascending();
-        PageRequest pageRequest = PageRequest.of(page, size).withSort(sort);
-        return userRepository.findAll(pageRequest).getContent();
-    }
+    // shift get all users --> In AdminController
 
-    @DeleteMapping("/api/account/{id}")
-    public ApiResponse<User> deleteById(@PathVariable String id){
-        return new ApiResponse<>(true, "User Deleted Successfully", userService.deleteById(id));
-    }
+
+//    shift delete user --> In AdminController
+//    @DeleteMapping("/api/account/{id}")
+//    public ApiResponse<User> deleteById(@PathVariable String id){
+//        return new ApiResponse<>(true, "User Deleted Successfully", userService.deleteById(id));
+//    }
 
 }

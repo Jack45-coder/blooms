@@ -8,15 +8,20 @@ import lombok.Setter;
 public class ApiResponse <T>{
     private boolean success;
     private String errorMessage;
+    private String successMessage;
     private T data;
 
     public ApiResponse(){
 
     }
 
-    public ApiResponse(boolean success, String errorMessage, T data){
+    public ApiResponse(boolean success, String message, T data){
         this.success = success;
-        this.errorMessage = errorMessage;
+        if(this.success){
+            this.successMessage = message;
+        }else {
+            this.errorMessage = message;
+        }
         this.data = data;
     }
 }

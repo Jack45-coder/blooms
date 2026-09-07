@@ -5,6 +5,7 @@ import in.codingage.blooms.dto.CategoryResponse;
 import in.codingage.blooms.exception.ApplicationException;
 import in.codingage.blooms.response.ApiResponse;
 import in.codingage.blooms.service.CategoryService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.List;
 //        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}
 //)
 
+@CrossOrigin(origins = {"http://localhost:5173", "https://blooms-ui.onrender.com"})
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
@@ -32,8 +34,8 @@ public class CategoryController {
 
     // ----------- Create Category --------------------
     @PostMapping
-    public ApiResponse<CategoryResponse> createCategory(@RequestBody CategoryRequest request){
-        return new ApiResponse<>(true, "Category Created Successfully", categoryService.createCategory(request));
+    public ApiResponse<CategoryResponse> createCategory(HttpServletRequest httpServletRequest, @RequestBody CategoryRequest request){
+        return new ApiResponse<>(true, "Category Created Successfully", categoryService.createCategory(httpServletRequest,request));
     }
 
     // ------------- Get Category ById -----------------
@@ -57,16 +59,16 @@ public class CategoryController {
 
 
 
-    @PutMapping("/{id}")
-    public ApiResponse<CategoryResponse> updateCategory(@RequestBody CategoryRequest request, @PathVariable String id) {
-        ////        // fetch category by id and update its name desc and cUrl using category request
-        ////        //make sure you are updating the found category and the list...
-        ////        // return updated category
-        ////        // Validation to return from here only if id is not present.
-        CategoryResponse response = categoryService.updateCategory(request, id)
-                .orElseThrow(() -> new ApplicationException("Category Not Found with id: " +id));
-        return new ApiResponse<>(true, "Category Updated Successfully", response);
-    }
+//    @PutMapping("/{id}")
+//    public ApiResponse<CategoryResponse> updateCategory(@RequestBody CategoryRequest request, @PathVariable String id) {
+//        ////        // fetch category by id and update its name desc and cUrl using category request
+//        ////        //make sure you are updating the found category and the list...
+//        ////        // return updated category
+//        ////        // Validation to return from here only if id is not present.
+//        CategoryResponse response = categoryService.updateCategory(request, id)
+//                .orElseThrow(() -> new ApplicationException("Category Not Found with id: " +id));
+//        return new ApiResponse<>(true, "Category Updated Successfully", response);
+//    }
 
     @DeleteMapping("/{categoryId}")
     public ApiResponse<String> deleteCategory(@PathVariable String categoryId) {

@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Set;
+
 //@Table(name = "users")
 //@Entity
 
@@ -15,12 +17,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
     @Id
     private String id;
-    private Role role;
+    private Set<Role> role;
     private String phone;
 
     @Indexed(unique = true)
     private String email;
-    private String name;
+    private String userName;
     private String profileUrl;
     private String password;
     private int age;

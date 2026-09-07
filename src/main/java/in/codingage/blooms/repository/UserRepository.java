@@ -11,9 +11,9 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByEmail(String email);
 
-    Optional<User> findFirstByName(String name);
+    Optional<User> findFirstByUserName(String userName);
 
-    Optional<User> findByPhoneAndPassword(String phone, String password);
+    Optional<User> findByUserNameAndPhone(String userName, String phone);
     Optional<User> findByPhone(String phone);
     Optional<User> findByPassword(String password);
 
@@ -28,10 +28,11 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findByRoleAndAgeGreaterThan(Role role, Integer age);
     List<User> findByRoleAndAgeLessThan(Role role, Integer age);
     List<User> findByAgeBetween(Role role, int minAge, int maxAge);
-    List<User> findByNameContaining(String str);
-    List<User> findByNameStartingWith(String str);
-    List<User> findByNameEndingWith(String str);
-    List<User> findByNameIgnoreCase(String str);
+//    List<User> findByUserNameContaining(String str);
+//    List<User> findByUserNameStartingWith(String str);
+//    List<User> findByUserNameEndingWith(String str);
+//    List<User> findByUserNameIgnoreCase(String str);
 
 
+    Optional<User> findByUserName(String username);
 }
