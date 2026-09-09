@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             throw new ApplicationException("User account is inactive");
         }
 
-        String token = jwtUtils.generateToken(user.getUserName());
+        String token = jwtUtils.generateToken(user.getPhone());
 
         return new LoginResponse(token, mapToResponse(user));
     }

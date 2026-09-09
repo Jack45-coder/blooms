@@ -61,9 +61,9 @@ public class CategoryServiceImpl implements CategoryService {
         Authentication authentication = SecurityContextHolder
                 .getContext()
                 .getAuthentication();
-        String username = authentication.getName();
+        String phone = authentication.getName();
 
-        User user = userRepository.findByUserName(username)
+        User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new ApplicationException("User not found"));
 
         Category category = new Category();
@@ -79,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
             category.setStatus(Status.INREVIEW.getDisplayName());
         }
 
-        category.setCreatedBy(httpServletRequest.getRemoteUser());
+        category.setCreatedBy(user.getId());
         category.setActive(true);
         category.setCreatedDTTM(LocalDateTime.now());
 
