@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // TODO 2: Validate JWT and extract username
-        if(jwtUtils.validateToken(token)){
+        if(token != null && jwtUtils.validateToken(token)){
             String username = jwtUtils.getUsernameFromToken(token);
             UserDetails user = userDetailsService.loadUserByUsername(username);
             // TODO 3: Load user details and set authentication in context
